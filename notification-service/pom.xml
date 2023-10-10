@@ -12,10 +12,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>notification-service</name>
     <description>notification-service</description>
-    <properties>
-        <java.version>11</java.version>
-        <snakeyaml>2.0</snakeyaml>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.yaml</groupId>
