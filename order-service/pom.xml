@@ -12,6 +12,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>order-service</name>
     <description>order-service</description>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.yaml</groupId>

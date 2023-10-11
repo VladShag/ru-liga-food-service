@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>dependency_bom</name>
     <description>dependency_bom</description>
+    <packaging>pom</packaging>
     <properties>
         <spring.version>2.7.16</spring.version>
         <mybatis.version>3.0.2</mybatis.version>
@@ -96,6 +97,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
