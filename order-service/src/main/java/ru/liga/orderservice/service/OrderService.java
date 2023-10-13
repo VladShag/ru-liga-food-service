@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.liga.orderservice.dto.FullOrderDTO;
 import ru.liga.orderservice.dto.MainOrderListDTO;
+import ru.liga.orderservice.dto.OrderCreatedDTO;
+import ru.liga.orderservice.dto.OrderToCreateDTO;
 import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.exceptions.NoSuchOrderException;
 import ru.liga.orderservice.repository.OrderRepository;
@@ -23,7 +25,7 @@ public class OrderService {
         if(orderToGet == null) throw new NoSuchOrderException("There is no order with id " + id);
         else return new FullOrderDTO();
     }
-    public List<Order> getOrdersByStatus(String status) {
+    public MainOrderListDTO getOrdersByStatus(String status) {
         List<Order> ordersToGet = new ArrayList<>();
         for(Order o : repository.orderRepo.values()) {
             if(o.getStatus().equals(status)) ordersToGet.add(o);
@@ -31,11 +33,10 @@ public class OrderService {
         if(ordersToGet.size() == 0) {
             throw new NoSuchOrderException("There is no order with status " + status);
         }
-        return ordersToGet;
+        return new MainOrderListDTO();
     }
-    public Order addNewOrder(Order order) {
-        repository.addNewOrder(order);
-        return order;
+    public OrderCreatedDTO addNewOrder(OrderToCreateDTO dto) {
+        return new OrderCreatedDTO();
     }
     public Order changeOrderInfo(long id, Order order) {
         Order orderToChange = repository.orderRepo.get(id);

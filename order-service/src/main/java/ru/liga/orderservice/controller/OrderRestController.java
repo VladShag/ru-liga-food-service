@@ -23,11 +23,11 @@ public class OrderRestController {
     }
     @GetMapping("/order")
     public MainOrderListDTO getOrdersByStatus(@RequestParam("status") String status){
-        return new MainOrderListDTO();
+        return service.getOrdersByStatus(status);
     }
     @PostMapping("/order")
     public OrderCreatedDTO addNewOrder(@RequestBody OrderToCreateDTO dto) {
-        return new OrderCreatedDTO();
+        return service.addNewOrder(dto);
     }
     @PutMapping("/order/{id}")
     public Order changeOrderInfo(@PathVariable("id") long id, @RequestBody Order order) {
