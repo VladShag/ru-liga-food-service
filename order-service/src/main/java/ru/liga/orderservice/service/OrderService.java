@@ -1,22 +1,25 @@
 package ru.liga.orderservice.service;
 
+import org.springframework.stereotype.Service;
+import ru.liga.orderservice.dto.FullOrderDTO;
+import ru.liga.orderservice.dto.MainOrderListDTO;
 import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.exceptions.NoSuchOrderException;
 import ru.liga.orderservice.repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class OrderService {
     private final OrderRepository repository = new OrderRepository();
 
-    public List<Order> getAllOrders() {
-        return new ArrayList<>(repository.orderRepo.values());
+    public MainOrderListDTO getAllOrders() {
+        return new MainOrderListDTO();
     }
-    public Order getOrderById(long id) {
+    public FullOrderDTO getOrderById(long id) {
         Order orderToGet = repository.orderRepo.get(id);
         if(orderToGet == null) throw new NoSuchOrderException("There is no order with id " + id);
-        else return orderToGet;
+        else return new FullOrderDTO();
     }
     public List<Order> getOrdersByStatus(String status) {
         List<Order> ordersToGet = new ArrayList<>();
