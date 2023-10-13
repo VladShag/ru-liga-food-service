@@ -1,5 +1,6 @@
 package ru.liga.orderservice.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.liga.orderservice.dto.FullOrderDTO;
 import ru.liga.orderservice.dto.MainOrderListDTO;
@@ -10,8 +11,9 @@ import ru.liga.orderservice.repository.OrderRepository;
 import java.util.ArrayList;
 import java.util.List;
 @Service
+@RequiredArgsConstructor
 public class OrderService {
-    private final OrderRepository repository = new OrderRepository();
+    private final OrderRepository repository;
 
     public MainOrderListDTO getAllOrders() {
         return new MainOrderListDTO();
