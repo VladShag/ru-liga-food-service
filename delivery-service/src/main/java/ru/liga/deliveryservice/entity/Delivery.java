@@ -1,5 +1,12 @@
 package ru.liga.deliveryservice.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Delivery {
     private long id;
     private long orderId;
@@ -7,15 +14,6 @@ public class Delivery {
     private long customerId;
     private int payment;
 
-    public Delivery() {
-    }
-
-    public Delivery(long orderId, long restaurantId, long customerId, int payment) {
-        this.orderId = orderId;
-        this.restaurantId = restaurantId;
-        this.customerId = customerId;
-        this.payment = payment;
-    }
 
     public long getId() {
         return id;

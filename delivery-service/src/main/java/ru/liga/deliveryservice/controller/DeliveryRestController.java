@@ -1,5 +1,6 @@
 package ru.liga.deliveryservice.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.deliveryservice.entity.Delivery;
 import ru.liga.deliveryservice.service.DeliveryService;
@@ -7,8 +8,9 @@ import ru.liga.deliveryservice.service.DeliveryService;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class DeliveryRestController {
-    DeliveryService service = new DeliveryService();
+    private final DeliveryService service;
 
     @GetMapping("/delivery/{id}")
     public Delivery getDeliveryById(@PathVariable("id") long id) {

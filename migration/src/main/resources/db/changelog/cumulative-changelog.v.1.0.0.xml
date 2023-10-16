@@ -4,13 +4,16 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="add-tag-1.0.0" author="vladShag">
+    <changeSet id="add-correct-tag-1.0.0" author="vladShag">
         <sqlFile path="v.1.0.0/create-table-couriers.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.0/create-table-customers.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.0/create-table-restaurants.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.0/create-table-orders.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.0/create-table-restaurant-menu-items.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.0/create-table-order-items.sql" relativeToChangelogFile="true"/>
+        <rollback>
+            <sqlFile path="v.1.0.0/rollback/init_rollback.sql" relativeToChangelogFile="true"/>
+        </rollback>
     </changeSet>
 
 </databaseChangeLog>
