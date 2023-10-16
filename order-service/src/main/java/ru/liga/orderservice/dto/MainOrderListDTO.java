@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 public class MainOrderListDTO {
         private List<OrderDTOInt> orders;
-        private int page_index;
-        private int page_count = 10;
+        private int pageIndex;
+        private int pageCount = 10;
 
 }

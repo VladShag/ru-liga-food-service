@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderToCreateDTO {
-    private int restaurant_id;
-    private List<ItemToAddDTO> menu_items;
+    private int restaurantId;
+    private List<ItemToAddDTO> menuItems;
 }

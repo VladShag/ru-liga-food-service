@@ -22,7 +22,9 @@ public class OrderService {
     }
     public FullOrderDTO getOrderById(long id) {
         Order orderToGet = repository.orderRepo.get(id);
-        if(orderToGet == null) throw new NoSuchOrderException("There is no order with id " + id);
+        if(orderToGet == null) {
+            throw new NoSuchOrderException("There is no order with id " + id);
+        }
         else return new FullOrderDTO();
     }
     public MainOrderListDTO getOrdersByStatus(String status) {
@@ -40,7 +42,9 @@ public class OrderService {
     }
     public Order changeOrderInfo(long id, Order order) {
         Order orderToChange = repository.orderRepo.get(id);
-        if(orderToChange == null) throw new NoSuchOrderException("There is no order with id " + order.getId());
+        if(orderToChange == null) {
+            throw new NoSuchOrderException("There is no order with id " + order.getId());
+        }
         else {
             orderToChange.setCourierId(order.getCourierId());
             orderToChange.setCustomerId(order.getCustomerId());

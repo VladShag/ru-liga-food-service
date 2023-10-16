@@ -8,6 +8,6 @@ import java.sql.Time;
 @Setter
 public class OrderCreatedDTO {
     private long id;
-    private String secret_payment_url;
-    private Time estimated_time_of_arrival;
+    private String secretPaymentUrl;
+    private Time estimatedTimeOfArrival;
 }
