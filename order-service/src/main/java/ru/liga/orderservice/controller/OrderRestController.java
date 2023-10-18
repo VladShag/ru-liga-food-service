@@ -6,7 +6,6 @@ import ru.liga.orderservice.dto.FullOrderDTO;
 import ru.liga.orderservice.dto.MainOrderListDTO;
 import ru.liga.orderservice.dto.OrderCreatedDTO;
 import ru.liga.orderservice.dto.OrderToCreateDTO;
-import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.service.OrderService;
 
 @RestController

@@ -1,7 +1,6 @@
 package ru.liga.orderservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.entity.OrderItem;
 
 import java.util.List;

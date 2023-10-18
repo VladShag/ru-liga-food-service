@@ -7,7 +7,6 @@ import ru.liga.orderservice.dto.OrderToCreateDTO;
 import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.entity.OrderItem;
 import ru.liga.orderservice.repository.OrderItemRepository;
-import ru.liga.orderservice.repository.OrderRepository;
 import ru.liga.orderservice.repository.RestaurantMenuItemRepository;
 
 import java.util.ArrayList;

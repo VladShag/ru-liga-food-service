@@ -1,16 +1,11 @@
 package ru.liga.orderservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import ru.liga.orderservice.dto.*;
 import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.entity.OrderItem;
-import ru.liga.orderservice.entity.RestaurantMenuItem;
-import ru.liga.orderservice.exceptions.NoSuchOrderException;
-import ru.liga.orderservice.repository.OrderItemRepository;
 import ru.liga.orderservice.repository.OrderRepository;
-import ru.liga.orderservice.repository.RestaurantMenuItemRepository;
 import ru.liga.orderservice.repository.RestaurantRepository;
 
 import java.sql.Time;
@@ -23,8 +18,6 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository repository;
     private final RestaurantRepository restaurantRepository;
-    private final RestaurantMenuItemRepository restaurantMenuItemRepository;
-    private final OrderItemRepository orderItemRepository;
     private final OrderItemService orderItemService;
 
     public MainOrderListDTO getAllOrders() {
