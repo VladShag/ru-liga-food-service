@@ -4,6 +4,11 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <!-- глобальный ченджлог  -->
-    <include file="changelog/cumulative-changelog.v.1.0.0.xml" relativeToChangelogFile="true"/>
-<!--    <include file="changelog/cumulative-changelog.v.1.0.1.xml" relativeToChangelogFile="true"/>-->
+    <include file="changelog/init-couriers-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-customers-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-order-items-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-orders-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-restaurant-menu-items-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-restaurants-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/cumulative-changelog.v.1.0.1.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
