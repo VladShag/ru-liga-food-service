@@ -2,6 +2,8 @@ package ru.liga.deliveryservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.liga.deliveryservice.dto.ChangeStatusDTO;
+import ru.liga.deliveryservice.dto.DelieveryDTO;
 import ru.liga.deliveryservice.entity.Delivery;
 import ru.liga.deliveryservice.service.DeliveryService;
 
@@ -21,7 +23,12 @@ public class DeliveryRestController {
         return service.addNewDelivery(delivery);
     }
     @GetMapping("/delivery")
-    public List<Delivery> getDeliveriesByStatus(@RequestParam("status") String status) {
+    public DelieveryDTO getDeliveriesByStatus(@RequestParam("status") String status) {
         return service.getDeliveriesByStatus(status);
+    }
+    @PostMapping("/delivery/{id}")
+    public Delivery setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
+        String status = dto.getOrderAction();
+        return service.setDeliveryStatus(id, status);
     }
 }
