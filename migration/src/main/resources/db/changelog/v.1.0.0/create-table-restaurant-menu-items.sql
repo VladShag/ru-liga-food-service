@@ -6,8 +6,8 @@ create table if not exists restaurant_menu_items
     restaurant_id bigint not null,
     name varchar(64) not null,
     price numeric not null,
-    image varchar(512),
-    description varchar(512),
+    image text,
+    description text,
     constraint restaurant_menu_items_pk primary key (id),
     constraint restaurant_fk foreign key(restaurant_id) references restaurants(id)
     );

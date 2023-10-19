@@ -1,4 +1,4 @@
 package ru.liga.orderservice.dto;
 
-public interface OrderDTOInt {
+public class OrderDTOInt {
 }

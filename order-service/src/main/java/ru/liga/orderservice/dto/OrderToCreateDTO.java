@@ -2,13 +2,14 @@ package ru.liga.orderservice.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.liga.orderservice.entity.Item;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class OrderToCreateDTO {
-    private int restaurantId;
+    private long restaurantId;
     private List<ItemToAddDTO> menuItems;
 }

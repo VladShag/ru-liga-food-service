@@ -1,4 +1,4 @@
-package ru.liga.orderservice.entity;
+package ru.liga.deliveryservice.entity;
 
 import lombok.*;
 
@@ -31,6 +31,4 @@ public class Order {
     private Long courierId;
     @Column(name = "timestamp")
     private Date timestamp;
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-    private List<OrderItem> items;
 }

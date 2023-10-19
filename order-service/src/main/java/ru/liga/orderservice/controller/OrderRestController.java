@@ -6,7 +6,6 @@ import ru.liga.orderservice.dto.FullOrderDTO;
 import ru.liga.orderservice.dto.MainOrderListDTO;
 import ru.liga.orderservice.dto.OrderCreatedDTO;
 import ru.liga.orderservice.dto.OrderToCreateDTO;
-import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.service.OrderService;
 
 @RestController
@@ -29,8 +28,5 @@ public class OrderRestController {
     public OrderCreatedDTO addNewOrder(@RequestBody OrderToCreateDTO dto) {
         return service.addNewOrder(dto);
     }
-    @PutMapping("/order/{id}")
-    public Order changeOrderInfo(@PathVariable("id") long id, @RequestBody Order order) {
-        return service.changeOrderInfo(id, order);
-    }
+
 }
