@@ -7,13 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "orders")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "orders")
-@ToString
 public class Order {
     @Id
     @Column(name = "id")

@@ -1,13 +1,12 @@
 package ru.liga.orderservice.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
-@ToString
+@Data
 public class ItemToAddDTO {
+    @NotNull
     private int quantity;
+    @NotNull
     private long menuItemId;
 }

@@ -19,7 +19,7 @@ public class RestaurantMenuItemRestController {
         service.deleteMenuItemById(id);
     }
     @PutMapping("/resItem/{id}")
-    public RestaurantMenuItem changeResItemPrice(@PathVariable("id") long id, @RequestBody int price) {
+    public RestaurantMenuItem changeResItemPrice(@PathVariable("id") long id, @RequestParam int price) {
         return service.changeItemPrice(id,price);
     }
 }

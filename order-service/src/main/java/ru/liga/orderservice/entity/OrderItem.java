@@ -5,13 +5,11 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "order_items")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "order_items")
-@ToString
 public class OrderItem {
     @Id
     @Column(name = "id")

@@ -5,13 +5,11 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Table(name = "restaurant_menu_items")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "restaurant_menu_items")
-@ToString
 public class RestaurantMenuItem {
     @Id
     @Column(name = "id")
@@ -29,7 +27,5 @@ public class RestaurantMenuItem {
     private String image;
     @Column(name = "description")
     private String description;
-//    @OneToOne
-//    @JoinColumn(name = "restaurant_menu_item")
-//    private OrderItem orderItem;
+
 }

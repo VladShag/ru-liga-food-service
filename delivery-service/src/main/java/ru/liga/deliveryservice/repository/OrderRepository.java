@@ -5,9 +5,10 @@ import org.springframework.stereotype.Repository;
 import ru.liga.deliveryservice.entity.Order;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findOrdersByStatus(String status);
-    Order findOrderById(Long id);
+    Optional<Order> findOrderById(Long id);
 }
