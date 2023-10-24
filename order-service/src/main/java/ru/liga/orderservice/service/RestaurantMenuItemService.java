@@ -10,33 +10,17 @@ import ru.liga.orderservice.repository.RestaurantMenuItemRepository;
 public class RestaurantMenuItemService {
     private final RestaurantMenuItemRepository repository;
     public RestaurantMenuItem getMenuItemById(long id) {
-        if(repository.getRestaurantMenuItemById(id).isPresent()) {
-            return repository.getRestaurantMenuItemById(id).get();
-        }
-        else {
-            throw exceptionById(id);
-        }
+        return repository.getRestaurantMenuItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no menu item this id: " + id));
     }
     public void deleteMenuItemById(long id) {
-        if(repository.getRestaurantMenuItemById(id).isPresent()){
-            repository.deleteById(id);
-        } else {
-            throw exceptionById(id);
-        }
+        repository.getRestaurantMenuItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no menu item this id: " + id));
+        repository.deleteById(id);
 
     }
     public RestaurantMenuItem changeItemPrice(long id, int price){
-        if(repository.getRestaurantMenuItemById(id).isPresent()) {
-            RestaurantMenuItem itemToChange = repository.getRestaurantMenuItemById(id).get();
-            itemToChange.setPrice(price);
-            repository.save(itemToChange);
-            return itemToChange;
-        }
-        else {
-            throw exceptionById(id);
-        }
-    }
-    private static NoSuchOrderException exceptionById(long id) {
-        return new NoSuchOrderException("There is no menu item this id " + id);
+        RestaurantMenuItem itemToChange = repository.getRestaurantMenuItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no menu item this id: " + id));
+        itemToChange.setPrice(price);
+        repository.save(itemToChange);
+        return itemToChange;
     }
 }

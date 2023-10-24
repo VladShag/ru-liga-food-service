@@ -21,31 +21,31 @@ import java.util.Date;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
-@Validated
 public class OrderService {
     private final OrderRepository repository;
     private final RestaurantRepository restaurantRepository;
     private final OrderItemService orderItemService;
     private final RabbitMQProducerServiceImp rabbit;
     private final long CUSTOMER_ID_MOCK = 13;
+    private final String MOSCOW_NAME = "Moscow";
 
     public MainOrderListDTO getAllOrders() {
         List<Order> orders = repository.findAll();
         MainOrderListDTO DTOToReturn = new MainOrderListDTO();
         List<FullOrderDTO> listToReturn = new ArrayList<>();
-        for (Order o : orders) {
+        for (Order orderInRepo : orders) {
             FullOrderDTO orderDTO = new FullOrderDTO();
-            orderDTO.setId(o.getId());
-            orderDTO.setRestaurant(o.getRestaurant());
-            orderDTO.setTimestamp(o.getTimestamp());
-            orderDTO.setItems(mapItemToItemToShowDTO(o.getItems()));
+            orderDTO.setId(orderInRepo.getId());
+            orderDTO.setRestaurant(orderInRepo.getRestaurant());
+            orderDTO.setTimestamp(orderInRepo.getTimestamp());
+            orderDTO.setItems(mapItemToItemToShowDTO(orderInRepo.getItems()));
             listToReturn.add(orderDTO);
         }
         DTOToReturn.setOrders(listToReturn);
         return DTOToReturn;
     }
     public FullOrderDTO getOrderById(long id) {
-        Order order =checkIfOrderExist(id);
+        Order order = checkIfOrderExist(id);
         FullOrderDTO orderDTO = new FullOrderDTO();
         orderDTO.setId(order.getId());
         orderDTO.setTimestamp(order.getTimestamp());
@@ -60,11 +60,11 @@ public class OrderService {
             throw  new NoSuchOrderException("There is no orders with status " + status);
         }
         List<OrderByStatusDTO> orderByStatusDTOS = new ArrayList<>();
-        for(Order o : ordersByStatus) {
+        for(Order orderInRepo : ordersByStatus) {
             OrderByStatusDTO newOrder = new OrderByStatusDTO();
-            newOrder.setId(o.getId());
+            newOrder.setId(orderInRepo.getId());
             List<ItemToAddDTO> itemList = new ArrayList<>();
-            for(OrderItem i : o.getItems()) {
+            for(OrderItem i : orderInRepo.getItems()) {
                 ItemToAddDTO itemDTO = new ItemToAddDTO();
                 itemDTO.setMenuItemId(i.getRestaurantMenuItem().getId());
                 itemDTO.setQuantity(i.getQuantity());
@@ -102,8 +102,8 @@ public class OrderService {
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
-        if(status.toString().equals("KITCHEN_PREPARING")) {
-            if(address.contains("Moscow")) {
+        if(Status.KITCHEN_PREPARING.toString().equals(status.toString())) {
+            if(address.contains(MOSCOW_NAME)) {
                 rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.moscow");
             } else {
                 rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.nizhniy_novgorod");
@@ -124,10 +124,6 @@ public class OrderService {
         return itemDTOList;
     }
     private Order checkIfOrderExist(long id) {
-        if(repository.existsById(id)) {
-            return repository.findOrderById(id).get();
-        } else {
-            throw new NoSuchOrderException("There is no order with id: " + id);
-        }
+       return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
     }
 }

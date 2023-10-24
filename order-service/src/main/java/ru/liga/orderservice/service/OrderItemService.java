@@ -18,7 +18,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Validated
 public class OrderItemService {
     private final OrderItemRepository repository;
     private final RestaurantMenuItemRepository restaurantMenuItemRepository;
@@ -40,18 +39,10 @@ public class OrderItemService {
         return orderItems;
     }
     public OrderItem getItemById(long id){
-        if(repository.getOrderItemById(id).isPresent()) {
-            return repository.getOrderItemById(id).get();
-        } else {
-            return null;
-        }
+        return repository.getOrderItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no order item this id: " + id));
     }
     public void deleteItemById(long id) {
-        if(repository.getOrderItemById(id).isPresent()) {
-            repository.deleteById(id);
-        } else {
-            throw new NoSuchOrderException("There is no Order Item with id " + id);
-        }
-
+        repository.getOrderItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no order item this id: " + id));
+        repository.deleteById(id);
     }
 }

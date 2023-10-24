@@ -22,8 +22,8 @@ public class DeliveryService {
         DelieveryListDTO deliveryDTO = new DelieveryListDTO();
         List<DeliveryDTO> deliveries = new ArrayList<>();
         List<Order> orderList = orderRepository.findOrdersByStatus(status);
-        for(Order o : orderList) {
-            deliveries.add(mapOrderToDelivery(o));
+        for(Order orderInRepo : orderList) {
+            deliveries.add(mapOrderToDelivery(orderInRepo));
         }
         deliveryDTO.setDeliveries(deliveries);
         return deliveryDTO;
