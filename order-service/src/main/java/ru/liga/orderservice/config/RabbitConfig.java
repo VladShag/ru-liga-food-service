@@ -35,6 +35,7 @@ public class RabbitConfig {
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return new RabbitTemplate(connectionFactory());
     }
+
     @Bean
     public Declarables myQueue() {
         Queue queueDirectFirst = new Queue("Courier MSC", false);

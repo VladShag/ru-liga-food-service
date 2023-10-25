@@ -6,7 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "restaurant_menu_items")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -9,6 +9,6 @@ import java.time.LocalDate;
 @Builder
 public class CaseDTO {
     private Long caseId;
-    private  String info;
+    private String info;
     private LocalDate createDt;
 }

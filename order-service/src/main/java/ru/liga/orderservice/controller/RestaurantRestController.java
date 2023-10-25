@@ -12,6 +12,7 @@ import ru.liga.orderservice.entity.Restaurant;
 public class RestaurantRestController {
 
     private final RestaurantMapper service;
+
     @GetMapping("/restaurant/{id}")
     public Restaurant getRestaurantById(@PathVariable("id") long id) {
         return service.getRestaurantById(id);

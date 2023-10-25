@@ -3,7 +3,6 @@ package ru.liga.orderservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import org.springframework.validation.annotation.Validated;
 import ru.liga.orderservice.dto.*;
 import ru.liga.orderservice.entity.Order;
 import ru.liga.orderservice.entity.OrderItem;
@@ -19,6 +18,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -44,6 +44,7 @@ public class OrderService {
         DTOToReturn.setOrders(listToReturn);
         return DTOToReturn;
     }
+
     public FullOrderDTO getOrderById(long id) {
         Order order = checkIfOrderExist(id);
         FullOrderDTO orderDTO = new FullOrderDTO();
@@ -53,18 +54,19 @@ public class OrderService {
         orderDTO.setItems(mapItemToItemToShowDTO(order.getItems()));
         return orderDTO;
     }
+
     public MainOrderListDTO getOrdersByStatus(Status status) {
         String statusToString = status.toString();
         List<Order> ordersByStatus = repository.findOrdersByStatus(statusToString);
-        if(ordersByStatus.size() == 0) {
-            throw  new NoSuchOrderException("There is no orders with status " + status);
+        if (ordersByStatus.isEmpty()) {
+            throw new NoSuchOrderException("There is no orders with status " + status);
         }
         List<OrderByStatusDTO> orderByStatusDTOS = new ArrayList<>();
-        for(Order orderInRepo : ordersByStatus) {
+        for (Order orderInRepo : ordersByStatus) {
             OrderByStatusDTO newOrder = new OrderByStatusDTO();
             newOrder.setId(orderInRepo.getId());
             List<ItemToAddDTO> itemList = new ArrayList<>();
-            for(OrderItem i : orderInRepo.getItems()) {
+            for (OrderItem i : orderInRepo.getItems()) {
                 ItemToAddDTO itemDTO = new ItemToAddDTO();
                 itemDTO.setMenuItemId(i.getRestaurantMenuItem().getId());
                 itemDTO.setQuantity(i.getQuantity());
@@ -77,11 +79,12 @@ public class OrderService {
         listToReturnDTO.setOrders(orderByStatusDTOS);
         return listToReturnDTO;
     }
+
     public OrderCreatedDTO addNewOrder(@Valid OrderToCreateDTO dto) {
         Order orderToAdd = new Order();
         orderToAdd.setTimestamp(new Date());
         OrderCreatedDTO orderCreatedDTO = new OrderCreatedDTO();
-        if(restaurantRepository.findRestaurantById(dto.getRestaurantId()).isPresent()){
+        if (restaurantRepository.findRestaurantById(dto.getRestaurantId()).isPresent()) {
             orderToAdd.setRestaurant(restaurantRepository.findRestaurantById(dto.getRestaurantId()).get());
             orderToAdd.setStatus(Status.CUSTOMER_CREATED.toString());
             orderToAdd.setCustomerId(CUSTOMER_ID_MOCK); //заглушка пока не будет авторизации и автоматического присвоения id клиента
@@ -93,6 +96,7 @@ public class OrderService {
         }
         return orderCreatedDTO;
     }
+
     public FullOrderDTO setOrderStatus(long id, Status status) {
         Order orderToChange = checkIfOrderExist(id);
         orderToChange.setStatus(status.toString());
@@ -102,8 +106,8 @@ public class OrderService {
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
-        if(Status.KITCHEN_PREPARING.toString().equals(status.toString())) {
-            if(address.contains(MOSCOW_NAME)) {
+        if (Status.KITCHEN_PREPARING.toString().equals(status.toString())) {
+            if (address.contains(MOSCOW_NAME)) {
                 rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.moscow");
             } else {
                 rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.nizhniy_novgorod");
@@ -111,9 +115,10 @@ public class OrderService {
         }
         return dtoToGive;
     }
+
     private static List<ItemToShowCustomerDTO> mapItemToItemToShowDTO(List<OrderItem> itemList) {
         List<ItemToShowCustomerDTO> itemDTOList = new ArrayList<>();
-        for(OrderItem item : itemList) {
+        for (OrderItem item : itemList) {
             ItemToShowCustomerDTO itemDTO = new ItemToShowCustomerDTO();
             itemDTO.setQuantity(item.getQuantity());
             itemDTO.setImage(item.getRestaurantMenuItem().getImage());
@@ -123,7 +128,8 @@ public class OrderService {
         }
         return itemDTOList;
     }
+
     private Order checkIfOrderExist(long id) {
-       return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
+        return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
     }
 }

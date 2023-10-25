@@ -9,6 +9,7 @@ import ru.liga.orderservice.service.RestaurantMenuItemService;
 @RequiredArgsConstructor
 public class RestaurantMenuItemRestController {
     private final RestaurantMenuItemService service;
+
     @GetMapping("/resItem/{id}")
     public RestaurantMenuItem getRestaurantItemById(@PathVariable("id") long id) {
         return service.getMenuItemById(id);
@@ -18,8 +19,9 @@ public class RestaurantMenuItemRestController {
     public void deleteOrderItemById(@PathVariable("id") long id) {
         service.deleteMenuItemById(id);
     }
+
     @PutMapping("/resItem/{id}")
     public RestaurantMenuItem changeResItemPrice(@PathVariable("id") long id, @RequestParam int price) {
-        return service.changeItemPrice(id,price);
+        return service.changeItemPrice(id, price);
     }
 }

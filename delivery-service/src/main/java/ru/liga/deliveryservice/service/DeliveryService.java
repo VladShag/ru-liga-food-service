@@ -11,6 +11,7 @@ import ru.liga.deliveryservice.repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DeliveryService {
@@ -19,36 +20,34 @@ public class DeliveryService {
     private final int DELIVERY_PAYMENT = 100; //Заглушка до рассчета цены
 
     public DelieveryListDTO getDeliveriesByStatus(String status) {
-        DelieveryListDTO deliveryDTO = new DelieveryListDTO();
+        DelieveryListDTO delieveryListDTO = new DelieveryListDTO();
         List<DeliveryDTO> deliveries = new ArrayList<>();
         List<Order> orderList = orderRepository.findOrdersByStatus(status);
-        for(Order orderInRepo : orderList) {
+        if (orderList.isEmpty()) {
+            throw new RuntimeException("Test info");
+        }
+        for (Order orderInRepo : orderList) {
             deliveries.add(mapOrderToDelivery(orderInRepo));
         }
-        deliveryDTO.setDeliveries(deliveries);
-        return deliveryDTO;
+        delieveryListDTO.setDeliveries(deliveries);
+        return delieveryListDTO;
     }
+
     public DeliveryDTO setDeliveryStatus(long id, Status status) {
-        if(orderRepository.findOrderById(id).isPresent()) {
-            Order order = orderRepository.findOrderById(id).get();
-            order.setStatus(status.toString());
-            orderRepository.save(order);
-            return mapOrderToDelivery(order);
-        } else {
-            throw new RuntimeException();
-        }
+        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new RuntimeException("test info"));
+        order.setStatus(status.toString());
+        orderRepository.save(order);
+        return mapOrderToDelivery(order);
     }
+
     public DeliveryDTO getDeliveryById(long id) {
-        if(orderRepository.findOrderById(id).isPresent()) {
-            Order order = orderRepository.findOrderById(id).get();
-            return mapOrderToDelivery(order);
-        } else {
-            throw new RuntimeException();
-        }
+        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new RuntimeException("test info"));
+        return mapOrderToDelivery(order);
     }
+
     private DeliveryDTO mapOrderToDelivery(Order order) {
         DeliveryDTO deliveryDTOToAdd = new DeliveryDTO();
-        deliveryDTOToAdd.setCustomer(customerRepository.getCustomerById(order.getCustomerId()));
+        deliveryDTOToAdd.setCustomer(customerRepository.getCustomerById(order.getCustomerId()).orElseThrow(() -> new RuntimeException("test info")));
         deliveryDTOToAdd.setOrderId(order.getId());
         deliveryDTOToAdd.setRestaurant(order.getRestaurant());
         deliveryDTOToAdd.setPayment(DELIVERY_PAYMENT);

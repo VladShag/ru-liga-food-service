@@ -3,6 +3,7 @@ package ru.liga.deliveryservice.dto;
 import lombok.Data;
 
 import java.util.List;
+
 @Data
 public class DelieveryListDTO {
     List<DeliveryDTO> deliveries;

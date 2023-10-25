@@ -21,14 +21,16 @@ public class DeliveryRestController {
     public DeliveryDTO getDeliveryById(@PathVariable("id") long id) {
         return service.getDeliveryById(id);
     }
+
     @GetMapping("/")
     public DelieveryListDTO getDeliveriesByStatus(@RequestParam("status") String status) {
         return service.getDeliveriesByStatus(status);
     }
+
     @PostMapping("/{id}")
-    public FullOrderDTO setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
+    public DeliveryDTO setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
         Status status = dto.getOrderAction();
-        service.setDeliveryStatus(id, status);
-        return feign.getData(id);
+        feign.getData(id);
+        return service.setDeliveryStatus(id, status);
     }
 }
