@@ -2,9 +2,9 @@ package ru.liga.orderservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.liga.orderservice.entity.RestaurantMenuItem;
-import ru.liga.orderservice.exceptions.NoSuchOrderException;
-import ru.liga.orderservice.repository.RestaurantMenuItemRepository;
+import ru.liga.common.entity.RestaurantMenuItem;
+import ru.liga.common.exceptions.NoSuchOrderException;
+import ru.liga.common.repository.RestaurantMenuItemRepository;
 
 @Service
 @RequiredArgsConstructor

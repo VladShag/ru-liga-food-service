@@ -15,7 +15,7 @@
         delete from restaurants where id = #{id}
     </delete>
 
-    <resultMap id="restaurant" type="ru.liga.orderservice.entity.Restaurant">
+    <resultMap id="restaurant" type="ru.liga.common.entity.Restaurant">
         <id property="id" column="id"/>
         <result property="address" column="address"/>
         <result property="status" column="status"/>

@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import ru.liga.orderservice.dto.*;
-import ru.liga.orderservice.entity.Order;
-import ru.liga.orderservice.entity.OrderItem;
-import ru.liga.orderservice.entity.Status;
-import ru.liga.orderservice.exceptions.NoSuchOrderException;
-import ru.liga.orderservice.repository.OrderRepository;
-import ru.liga.orderservice.repository.RestaurantRepository;
+import ru.liga.common.entity.Order;
+import ru.liga.common.entity.OrderItem;
+import ru.liga.common.entity.Status;
+import ru.liga.common.exceptions.NoSuchOrderException;
+import ru.liga.common.repository.OrderRepository;
+import ru.liga.common.repository.RestaurantRepository;
 import ru.liga.orderservice.service.rabbitMQproducer.RabbitMQProducerServiceImp;
 
 

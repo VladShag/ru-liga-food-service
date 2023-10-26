@@ -1,9 +1,6 @@
 package ru.liga.common.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,7 +26,7 @@ public class Order {
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
     @Column(name = "status")
-    private Status status;
+    private String status;
     @Column(name = "courier_id")
     private Long courierId;
     @Column(name = "timestamp")

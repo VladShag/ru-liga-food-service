@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.liga.orderservice.dto.ItemToAddDTO;
 import ru.liga.orderservice.dto.OrderToCreateDTO;
-import ru.liga.orderservice.entity.Order;
-import ru.liga.orderservice.entity.OrderItem;
-import ru.liga.orderservice.entity.RestaurantMenuItem;
-import ru.liga.orderservice.exceptions.NoSuchOrderException;
-import ru.liga.orderservice.repository.OrderItemRepository;
-import ru.liga.orderservice.repository.RestaurantMenuItemRepository;
+import ru.liga.common.entity.Order;
+import ru.liga.common.entity.OrderItem;
+import ru.liga.common.entity.RestaurantMenuItem;
+import ru.liga.common.exceptions.NoSuchOrderException;
+import ru.liga.common.repository.OrderItemRepository;
+import ru.liga.common.repository.RestaurantMenuItemRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;

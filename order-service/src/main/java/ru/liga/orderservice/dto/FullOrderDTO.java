@@ -1,7 +1,7 @@
 package ru.liga.orderservice.dto;
 
 import lombok.Data;
-import ru.liga.orderservice.entity.Restaurant;
+import ru.liga.common.entity.Restaurant;
 
 
 import javax.validation.constraints.NotBlank;

@@ -1,9 +1,8 @@
 package ru.liga.orderservice.batisMapper;
 
 import org.springframework.stereotype.Repository;
-import ru.liga.orderservice.entity.Restaurant;
-
-
+import ru.liga.common.entity.Restaurant;
+@Repository
 public interface RestaurantMapper {
         Restaurant getRestaurantById(long id);
 

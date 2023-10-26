@@ -6,7 +6,7 @@ import ru.liga.deliveryservice.dto.ChangeStatusDTO;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
 import ru.liga.deliveryservice.dto.DeliveryDTO;
 import ru.liga.deliveryservice.dto.FullOrderDTO;
-import ru.liga.deliveryservice.entity.Status;
+import ru.liga.common.entity.Status;
 import ru.liga.deliveryservice.feign.CoreFeign;
 import ru.liga.deliveryservice.service.DeliveryService;
 

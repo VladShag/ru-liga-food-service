@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import ru.liga.orderservice.batisMapper.RestaurantMapper;
-import ru.liga.orderservice.entity.Restaurant;
+import ru.liga.common.entity.Restaurant;
 
 @RestController
 @RequiredArgsConstructor

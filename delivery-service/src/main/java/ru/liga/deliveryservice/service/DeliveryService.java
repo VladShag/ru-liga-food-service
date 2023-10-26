@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
 import ru.liga.deliveryservice.dto.DeliveryDTO;
-import ru.liga.deliveryservice.entity.Order;
-import ru.liga.deliveryservice.entity.Status;
-import ru.liga.deliveryservice.repository.CustomerRepository;
-import ru.liga.deliveryservice.repository.OrderRepository;
+import ru.liga.common.entity.Order;
+import ru.liga.common.entity.Status;
+import ru.liga.common.repository.CustomerRepository;
+import ru.liga.common.repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;

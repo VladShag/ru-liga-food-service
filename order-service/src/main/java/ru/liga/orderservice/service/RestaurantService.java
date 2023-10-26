@@ -3,7 +3,7 @@ package ru.liga.orderservice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.liga.orderservice.batisMapper.RestaurantMapper;
-import ru.liga.orderservice.entity.Restaurant;
+import ru.liga.common.entity.Restaurant;
 
 
 @Service
