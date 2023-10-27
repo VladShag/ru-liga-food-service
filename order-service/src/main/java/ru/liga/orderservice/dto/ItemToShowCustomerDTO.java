@@ -1,14 +1,14 @@
 package ru.liga.orderservice.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+import javax.validation.constraints.NotNull;
+
+@Data
 public class ItemToShowCustomerDTO {
+    @NotNull
     private int price;
+    @NotNull
     private int quantity;
     private String description;
     private String image;

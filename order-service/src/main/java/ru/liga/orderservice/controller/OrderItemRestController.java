@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import ru.liga.orderservice.entity.OrderItem;
+import ru.liga.common.entity.OrderItem;
 import ru.liga.orderservice.service.OrderItemService;
 
 @RestController

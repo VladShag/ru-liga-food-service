@@ -2,51 +2,56 @@ package ru.liga.deliveryservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.liga.deliveryservice.dto.DelieveryDTO;
-import ru.liga.deliveryservice.entity.Delivery;
-import ru.liga.deliveryservice.entity.Order;
-import ru.liga.deliveryservice.repository.CustomerRepository;
-import ru.liga.deliveryservice.repository.OrderRepository;
-import ru.liga.deliveryservice.repository.RestaurantRepository;
+import ru.liga.deliveryservice.dto.DelieveryListDTO;
+import ru.liga.deliveryservice.dto.DeliveryDTO;
+import ru.liga.common.entity.Order;
+import ru.liga.common.entity.Status;
+import ru.liga.common.repository.CustomerRepository;
+import ru.liga.common.repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DeliveryService {
     private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
-    private final RestaurantRepository restaurantRepository;
-    public DelieveryDTO getDeliveriesByStatus(String status) {
-        DelieveryDTO deliveryDTO = new DelieveryDTO();
-        List<Delivery> deliveries = new ArrayList<>();
+    private final int DELIVERY_PAYMENT = 100; //Заглушка до рассчета цены
+
+    public DelieveryListDTO getDeliveriesByStatus(String status) {
+        DelieveryListDTO delieveryListDTO = new DelieveryListDTO();
+        List<DeliveryDTO> deliveries = new ArrayList<>();
         List<Order> orderList = orderRepository.findOrdersByStatus(status);
-        for(Order o : orderList) {
-            deliveries.add(mapOrderToDelivery(o));
+        if (orderList.isEmpty()) {
+            throw new RuntimeException("Test info");
         }
-        deliveryDTO.setDeliveries(deliveries);
-        return deliveryDTO;
+        for (Order orderInRepo : orderList) {
+            deliveries.add(mapOrderToDelivery(orderInRepo));
+        }
+        delieveryListDTO.setDeliveries(deliveries);
+        return delieveryListDTO;
     }
-    public Delivery setDeliveryStatus(long id, String status) {
-        Order order = orderRepository.findOrderById(id);
-        order.setStatus(status);
+
+    public DeliveryDTO setDeliveryStatus(long id, Status status) {
+        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new RuntimeException("test info"));
+        order.setStatus(status.toString());
         orderRepository.save(order);
         return mapOrderToDelivery(order);
     }
 
-    public Delivery addNewDelivery(Delivery delivery) {
-        return null;
+    public DeliveryDTO getDeliveryById(long id) {
+        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new RuntimeException("test info"));
+        return mapOrderToDelivery(order);
     }
-    public Delivery getDeliveryById(long id) {
-        return null;
-    }
-    private Delivery mapOrderToDelivery(Order o) {
-        Delivery deliveryToAdd = new Delivery();
-        deliveryToAdd.setCustomer(customerRepository.getCustomerById(o.getCustomerId()));
-        deliveryToAdd.setOrderId(o.getId());
-        deliveryToAdd.setRestaurant(o.getRestaurant());
-        deliveryToAdd.setPayment(100);
-        return deliveryToAdd;
+
+    private DeliveryDTO mapOrderToDelivery(Order order) {
+        DeliveryDTO deliveryDTOToAdd = new DeliveryDTO();
+        deliveryDTOToAdd.setCustomer(customerRepository.getCustomerById(order.getCustomerId()).orElseThrow(() -> new RuntimeException("test info")));
+        deliveryDTOToAdd.setOrderId(order.getId());
+        deliveryDTOToAdd.setRestaurant(order.getRestaurant());
+        deliveryDTOToAdd.setPayment(DELIVERY_PAYMENT);
+        return deliveryDTOToAdd;
     }
 
 }
