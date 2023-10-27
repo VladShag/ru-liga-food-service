@@ -1,9 +1,9 @@
-package ru.liga.orderservice.controller;
+package ru.liga.kitchenservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.common.entity.RestaurantMenuItem;
-import ru.liga.orderservice.service.RestaurantMenuItemService;
+import ru.liga.kitchenservice.service.RestaurantMenuItemService;
 
 @RestController
 @RequiredArgsConstructor

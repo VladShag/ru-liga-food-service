@@ -106,7 +106,7 @@ public class OrderService {
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
-        if (Status.KITCHEN_PREPARING.toString().equals(status.toString())) {
+        if (Status.CUSTOMER_PAID.toString().equals(status.toString())) {
             if (address.contains(MOSCOW_NAME)) {
                 rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.moscow");
             } else {
@@ -131,5 +131,8 @@ public class OrderService {
 
     private Order checkIfOrderExist(long id) {
         return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
+    }
+    private void sendMessageByStatus(Order order) {
+
     }
 }

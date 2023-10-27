@@ -1,4 +1,4 @@
-package ru.liga.orderservice.service;
+package ru.liga.kitchenservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +10,9 @@ import ru.liga.common.repository.RestaurantMenuItemRepository;
 @RequiredArgsConstructor
 public class RestaurantMenuItemService {
     private final RestaurantMenuItemRepository repository;
+    public void saveMenuItem(RestaurantMenuItem item) {
+        repository.save(item);
+    }
 
     public RestaurantMenuItem getMenuItemById(long id) {
         return repository.getRestaurantMenuItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no menu item this id: " + id));
