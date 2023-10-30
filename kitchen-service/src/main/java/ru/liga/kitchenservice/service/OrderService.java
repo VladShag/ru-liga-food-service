@@ -1,6 +1,7 @@
 package ru.liga.kitchenservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import ru.liga.common.entity.Order;
 import ru.liga.common.entity.Status;
@@ -25,13 +26,15 @@ public class OrderService {
         Order orderToChange = orderRepository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id " + id));
         orderToChange.setStatus(status.toString());
         orderRepository.save(orderToChange);
-        String address = orderToChange.getRestaurant().getAddress();
         if (Status.DELIVERY_PENDING.toString().equals(status.toString())) {
-            if (address.contains(MOSCOW_NAME)) {
-                rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.moscow");
-            } else {
-                rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.nizhniy_novgorod");
-            }
+            rabbit.sendMessage("New order with id " + orderToChange.getId() + "is waiting for delivery", "couriers");
         }
+        if(Status.KITCHEN_DENIED.toString().equals(status.toString())) {
+            rabbit.sendMessage("Sorry, your order is being canceled", "customers");
+        }
+    }
+    @RabbitListener(queues = "kitchen-service")
+    public void processMyQueue(String message) {
+        System.out.println(message);
     }
 }

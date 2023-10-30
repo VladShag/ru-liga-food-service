@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 
-@SpringBootApplication
-@MapperScan("ru.liga.orderservice.batisMapper")
+@SpringBootApplication (scanBasePackages = {"ru.liga.kitchenservice", "ru.liga.common"})
+@MapperScan("ru.liga.kitchenservice.batisMapper")
 public class KitchenServiceApplication {
 
     public static void main(String[] args) {

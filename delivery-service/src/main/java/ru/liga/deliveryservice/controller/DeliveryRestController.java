@@ -1,6 +1,7 @@
 package ru.liga.deliveryservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.deliveryservice.dto.ChangeStatusDTO;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
@@ -10,6 +11,8 @@ import ru.liga.common.entity.Status;
 import ru.liga.deliveryservice.feign.CoreFeign;
 import ru.liga.deliveryservice.service.DeliveryService;
 
+import javax.annotation.security.RolesAllowed;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/delivery")
@@ -18,6 +21,7 @@ public class DeliveryRestController {
     private final CoreFeign feign;
 
     @GetMapping("/{id}")
+    @RolesAllowed("COURIER")
     public DeliveryDTO getDeliveryById(@PathVariable("id") long id) {
         return service.getDeliveryById(id);
     }
