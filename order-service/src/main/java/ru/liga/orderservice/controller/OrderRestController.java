@@ -1,6 +1,7 @@
 package ru.liga.orderservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.orderservice.dto.*;
 import ru.liga.common.entity.Status;

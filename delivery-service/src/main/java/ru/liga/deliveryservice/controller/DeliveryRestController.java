@@ -2,6 +2,7 @@ package ru.liga.deliveryservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.deliveryservice.dto.ChangeStatusDTO;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
@@ -21,7 +22,6 @@ public class DeliveryRestController {
     private final CoreFeign feign;
 
     @GetMapping("/{id}")
-    @RolesAllowed("COURIER")
     public DeliveryDTO getDeliveryById(@PathVariable("id") long id) {
         return service.getDeliveryById(id);
     }

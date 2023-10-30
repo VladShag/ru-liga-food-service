@@ -56,9 +56,10 @@ public class UserService {
         if(details == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Пользователь не найден!");
          }
-        List<SimpleGrantedAuthority> grantedAuthorities = details.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority.getAuthority())).collect(Collectors.toList());
+        List<GrantedAuthority> grantedAuthorities = details.getAuthorities().stream().map(authority -> new SimpleGrantedAuthority(authority.getAuthority())).collect(Collectors.toList());
         grantedAuthorities.add(new SimpleGrantedAuthority(request.getNewRole()));
-        ((JdbcUserDetailsManager) details).updateUser(details);
+        UserDetails newDetails = new CustomUserDetails(details.getUsername(), details.getPassword(), grantedAuthorities);
+        ((JdbcUserDetailsManager) userDetailsService).updateUser(newDetails);
         return ResponseEntity.ok("Роль успешно добавлена!");
     }
 }

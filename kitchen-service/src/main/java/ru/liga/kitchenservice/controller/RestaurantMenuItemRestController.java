@@ -1,6 +1,7 @@
 package ru.liga.kitchenservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.common.entity.RestaurantMenuItem;
 import ru.liga.kitchenservice.service.RestaurantMenuItemService;
