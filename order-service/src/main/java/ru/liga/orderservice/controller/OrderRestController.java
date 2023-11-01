@@ -4,11 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.yaml.snakeyaml.util.EnumUtils;
 import ru.liga.orderservice.dto.*;
 import ru.liga.common.entity.Status;
 import ru.liga.orderservice.service.OrderService;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -63,10 +68,9 @@ public class OrderRestController {
             description = "Метод позволяющий установить статус заказа, новый статус передается в DTO, которая передается в теле запроса. " +
                     "В ответ при удачной отработке метода выводится вся информация о заказе"
     )
-    public FullOrderDTO setDeliveryStatus(@PathVariable("id")@Parameter(description = "ID заказа") long id, @RequestBody  @Parameter(description = "DTO для смены статуса") ChangeStatusDTO dto) {
+    public FullOrderDTO setOrderStatus(@PathVariable("id")@Parameter(description = "ID заказа") @Min(0) long id, @RequestBody  @Parameter(description = "DTO для смены статуса") @Valid ChangeStatusDTO dto) {
         Status status = dto.getOrderAction();
-        service.setOrderStatus(id, status);
-        return service.getOrderById(id);
+        return service.setOrderStatus(id, status);
     }
 
 }

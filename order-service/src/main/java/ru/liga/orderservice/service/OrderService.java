@@ -124,7 +124,7 @@ public class OrderService {
         return itemDTOList;
     }
 
-    private Order checkIfOrderExist(long id) {
+    public Order checkIfOrderExist(long id) {
         return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
     }
     private void sendMessageByStatus(Order order) {
