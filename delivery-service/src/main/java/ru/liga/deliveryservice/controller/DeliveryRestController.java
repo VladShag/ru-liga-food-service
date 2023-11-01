@@ -1,6 +1,8 @@
 package ru.liga.deliveryservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.deliveryservice.dto.ChangeStatusDTO;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
@@ -9,6 +11,8 @@ import ru.liga.deliveryservice.dto.FullOrderDTO;
 import ru.liga.common.entity.Status;
 import ru.liga.deliveryservice.feign.CoreFeign;
 import ru.liga.deliveryservice.service.DeliveryService;
+
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequiredArgsConstructor

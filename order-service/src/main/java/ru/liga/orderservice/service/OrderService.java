@@ -100,18 +100,13 @@ public class OrderService {
     public FullOrderDTO setOrderStatus(long id, Status status) {
         Order orderToChange = checkIfOrderExist(id);
         orderToChange.setStatus(status.toString());
-        String address = orderToChange.getRestaurant().getAddress();
         repository.save(orderToChange);
         FullOrderDTO dtoToGive = new FullOrderDTO();
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
-        if (Status.KITCHEN_PREPARING.toString().equals(status.toString())) {
-            if (address.contains(MOSCOW_NAME)) {
-                rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.moscow");
-            } else {
-                rabbit.sendMessage("Order with id " + id + " waiting for delivery", "delivery.nizhniy_novgorod");
-            }
+        if (Status.CUSTOMER_PAID.toString().equals(status.toString())) {
+            rabbit.sendMessage("New order with id: " + orderToChange.getId() + " is waiting for acception", "restaurants");
         }
         return dtoToGive;
     }
@@ -131,5 +126,8 @@ public class OrderService {
 
     private Order checkIfOrderExist(long id) {
         return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
+    }
+    private void sendMessageByStatus(Order order) {
+
     }
 }

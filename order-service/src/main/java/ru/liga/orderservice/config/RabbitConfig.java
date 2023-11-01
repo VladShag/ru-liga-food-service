@@ -39,12 +39,10 @@ public class RabbitConfig {
 
     @Bean
     public Declarables myQueue() {
-        Queue queueDirectFirst = new Queue("Courier MSC", false);
-        Queue queueDirectSecond = new Queue("Courier_NN", false);
+        Queue queueDirectFirst = new Queue("restaurants", false);
         DirectExchange directExchange = new DirectExchange("directExchange");
 
-        return new Declarables(queueDirectFirst, queueDirectSecond, directExchange,
-                BindingBuilder.bind(queueDirectFirst).to(directExchange).with("delivery.moscow"),
-                BindingBuilder.bind(queueDirectSecond).to(directExchange).with("delivery.nizhniy_novgorod"));
+        return new Declarables(queueDirectFirst, directExchange,
+                BindingBuilder.bind(queueDirectFirst).to(directExchange).with("restaurants"));
     }
 }

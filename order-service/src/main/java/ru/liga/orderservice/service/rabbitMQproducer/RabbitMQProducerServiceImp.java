@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 public class RabbitMQProducerServiceImp implements RabbitMQProducerService {
 
     private final RabbitTemplate rabbitTemplate;
+    private final String EXCHANGE_TYPE = "directExchange";
 
     public void sendMessage(String message, String routingKey) {
-        rabbitTemplate.convertAndSend("directExchange", routingKey, message);
+        rabbitTemplate.convertAndSend(EXCHANGE_TYPE, routingKey, message);
         System.out.println("Message sent");
     }
 }
