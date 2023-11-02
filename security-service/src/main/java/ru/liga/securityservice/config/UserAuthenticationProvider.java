@@ -27,7 +27,8 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         UserDetails user = userDetailsService.loadUserByUsername(login);
 
         if (passwordEncoder.matches(CharBuffer.wrap(password), user.getPassword())) {
-            return UsernamePasswordAuthenticationToken.authenticated(login, password, Collections.emptyList());
+            System.out.println(login + " " + password + " " + user.getAuthorities());
+            return UsernamePasswordAuthenticationToken.authenticated(login, password, user.getAuthorities());
         }
 
         return null;

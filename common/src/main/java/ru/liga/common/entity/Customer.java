@@ -16,9 +16,14 @@ import javax.persistence.*;
 public class Customer {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_seq_gen")
-    @SequenceGenerator(name = "order_seq_gen", sequenceName = "orders_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq_gen")
+    @SequenceGenerator(name = "customer_seq_gen", sequenceName = "costomers_seq", allocationSize = 1)
     private long id;
     @Column(name = "address")
     private String address;
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "email")
+    private String email;
+
 }

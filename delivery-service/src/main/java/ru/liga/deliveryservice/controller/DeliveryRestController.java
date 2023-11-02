@@ -22,6 +22,7 @@ public class DeliveryRestController {
     private final CoreFeign feign;
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_COURIER')")
     public DeliveryDTO getDeliveryById(@PathVariable("id") long id) {
         return service.getDeliveryById(id);
     }

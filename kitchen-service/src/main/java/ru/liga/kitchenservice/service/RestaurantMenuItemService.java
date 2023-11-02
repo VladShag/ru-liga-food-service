@@ -6,12 +6,29 @@ import ru.liga.common.entity.RestaurantMenuItem;
 import ru.liga.common.exceptions.NoSuchOrderException;
 import ru.liga.common.repository.RestaurantMenuItemRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RestaurantMenuItemService {
     private final RestaurantMenuItemRepository repository;
-    public void saveMenuItem(RestaurantMenuItem item) {
+    public List<RestaurantMenuItem> getAllMenuItems() {
+        List<RestaurantMenuItem> items = repository.findAll();
+        if(items.isEmpty()) {
+            throw new NoSuchOrderException("Res.Menu Item is empty!");
+        }
+        return items;
+    }
+    public List<RestaurantMenuItem> getAllMenuItemsByRestaurant(long resId) {
+        List<RestaurantMenuItem> resMenu = repository.getRestaurantMenuItemByRestaurantId(resId);
+        if(resMenu.isEmpty()) {
+            throw new NoSuchOrderException("Menu of restaurant with id " + resId + " is empty!");
+        }
+        return resMenu;
+    }
+    public RestaurantMenuItem saveMenuItem(RestaurantMenuItem item) {
         repository.save(item);
+        return item;
     }
 
     public RestaurantMenuItem getMenuItemById(long id) {

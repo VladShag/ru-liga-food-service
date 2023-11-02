@@ -6,7 +6,7 @@ spring:
     gateway:
       routes:
         - id: delivery
-          uri: http://127.0.0.1:9002
+          uri: http://localhost:9002
           predicates:
             - Path=/delivery/**
           filters:

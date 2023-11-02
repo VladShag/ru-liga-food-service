@@ -7,16 +7,17 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class OAuth2ResourceServerSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .mvcMatcher("/**")
+                .mvcMatcher("/delivery/**")
                 .authorizeRequests()
-                .mvcMatchers("/**")
+                .mvcMatchers("/delivery/**")
                 .access("hasAuthority('SCOPE_message.read')")
                 .and()
                 .oauth2ResourceServer()

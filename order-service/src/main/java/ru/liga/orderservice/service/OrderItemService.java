@@ -38,6 +38,13 @@ public class OrderItemService {
         }
         return orderItems;
     }
+    public List<OrderItem> getOrderItemsByOrderId(long orderId) {
+        List<OrderItem> items = repository.getOrderItemByOrder_Id(orderId);
+        if(items.isEmpty()) {
+            throw new NoSuchOrderException("There is no Items in Order with id: " + orderId);
+        }
+        return items;
+    }
 
     public OrderItem getItemById(long id) {
         return repository.getOrderItemById(id).orElseThrow(() -> new NoSuchOrderException("There is no order item this id: " + id));
