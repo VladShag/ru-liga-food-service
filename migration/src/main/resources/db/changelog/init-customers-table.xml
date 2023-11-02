@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="init-customers-table-16.10.23" author="vladShag">
+    <changeSet id="init-customers-table-02.11.2023NEW" author="vladShag">
         <sqlFile path="v.1.0.0/create-table-customers.sql" relativeToChangelogFile="true"/>
         <rollback>
             <sqlFile path="v.1.0.0/rollback/customers_rollback.sql" relativeToChangelogFile="true"/>
