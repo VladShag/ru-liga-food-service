@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.liga.common.entity.Status;
-import ru.liga.common.exceptions.NoSuchOrderException;
+import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.orderservice.OrderServiceApplication;
 import ru.liga.orderservice.dto.ChangeStatusDTO;
 import ru.liga.orderservice.dto.FullOrderDTO;
 import ru.liga.orderservice.service.OrderService;
-
-import java.util.Random;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -98,7 +95,7 @@ public class OrderControllerMockMvcUnitTests {
     void testSetOrderStatusIfIdNotFound() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
         testDTO.setOrderAction(Status.DELIVERY_PENDING);
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenThrow(new NoSuchOrderException("test info"));
+        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenThrow(new NoSuchEntityException("test info"));
         mockMvc.perform(post("/order/status/{id}", 50).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }

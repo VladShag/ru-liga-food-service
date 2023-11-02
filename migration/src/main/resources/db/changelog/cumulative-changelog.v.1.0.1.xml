@@ -8,9 +8,9 @@
         <sqlFile path="v.1.0.1/insert-into-couriers.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.1/insert-into-customers.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.1/insert-into-restaurants.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="v.1.0.1/insert-into-orders.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.1/insert-into-restaurant-menu-items.sql" relativeToChangelogFile="true"/>
-<!--        <sqlFile path="v.1.0.1/insert-into-orders.sql" relativeToChangelogFile="true"/>-->
-<!--        <sqlFile path="v.1.0.1/insert-into-order-items.sql" relativeToChangelogFile="true"/>-->
+        <sqlFile path="v.1.0.1/insert-into-order-items.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>

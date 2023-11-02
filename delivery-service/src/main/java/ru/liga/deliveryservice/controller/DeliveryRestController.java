@@ -1,5 +1,6 @@
 package ru.liga.deliveryservice.controller;
 
+import com.sun.xml.bind.v2.TODO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,9 +34,8 @@ public class DeliveryRestController {
     }
 
     @PostMapping("/{id}")
-    public DeliveryDTO setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
-        Status status = dto.getOrderAction();
-        feign.getData(id);
-        return service.setDeliveryStatus(id, status);
+    public FullOrderDTO setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
+        //Дописать маппер FullOrderDTO на DeliveryDTO
+        return feign.setOrderStatus(id, dto);
     }
 }

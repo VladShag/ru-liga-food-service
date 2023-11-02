@@ -7,7 +7,7 @@ import ru.liga.orderservice.dto.*;
 import ru.liga.common.entity.Order;
 import ru.liga.common.entity.OrderItem;
 import ru.liga.common.entity.Status;
-import ru.liga.common.exceptions.NoSuchOrderException;
+import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.common.repository.OrderRepository;
 import ru.liga.common.repository.RestaurantRepository;
 import ru.liga.orderservice.service.rabbitMQproducer.RabbitMQProducerServiceImp;
@@ -59,7 +59,7 @@ public class OrderService {
         String statusToString = status.toString();
         List<Order> ordersByStatus = repository.findOrdersByStatus(statusToString);
         if (ordersByStatus.isEmpty()) {
-            throw new NoSuchOrderException("There is no orders with status " + status);
+            throw new NoSuchEntityException("There is no orders with status " + status);
         }
         List<OrderByStatusDTO> orderByStatusDTOS = new ArrayList<>();
         for (Order orderInRepo : ordersByStatus) {
@@ -125,7 +125,7 @@ public class OrderService {
     }
 
     public Order checkIfOrderExist(long id) {
-        return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
+        return repository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + id));
     }
     private void sendMessageByStatus(Order order) {
 

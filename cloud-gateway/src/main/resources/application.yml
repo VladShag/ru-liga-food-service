@@ -26,6 +26,13 @@ spring:
           filters:
             - TokenRelay=
             - RemoveRequestHeader=Cookie
+        - id: swagger
+          uri: http://127.0.0.1:9001/
+          predicates:
+            - Path=/**
+          filters:
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
 
   security:
     oauth2:

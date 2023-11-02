@@ -13,7 +13,7 @@ public class OAuth2ResourceServerSecurityConfiguration {
                 .mvcMatcher("/**")
                 .authorizeRequests()
                 .mvcMatchers("/**")
-                .access("hasAuthority('SCOPE_message.read') and hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')")
+                .access("hasAuthority('SCOPE_message.read')")
                 .and()
                 .oauth2ResourceServer()
                 .jwt();
