@@ -9,10 +9,11 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Locale;
 
-
+@Configuration
 public class OpenApiConfig {
     private SecurityScheme createApiKeyScheme() {
         return new SecurityScheme().type(SecurityScheme.Type.HTTP).bearerFormat("JWT").scheme("bearer");
@@ -24,7 +25,7 @@ public class OpenApiConfig {
                 .info(new Info().title("API сервиса заказов")
                         .description("В данном разделе храняться методы для Order Service и вся документация по ним")
                         .version("0.0.1").contact(new Contact().name("Vlad Shagalov").email("vladnnovgorod@yandex.ru"))
-                        .license(new License().name("License of API").url("api")));
+                        .license(new License().name("License of API").url("API license URL")));
 
     }
 }

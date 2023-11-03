@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,12 +23,10 @@ import ru.liga.orderservice.dto.FullOrderDTO;
 import ru.liga.orderservice.service.OrderService;
 
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(OrderRestController.class)
@@ -40,18 +39,19 @@ public class OrderControllerMockMvcUnitTests {
     @MockBean
     private OrderService orderService;
 
-
     @Test
+    @WithMockUser(authorities = {"SCOPE_message.read"})
     @SneakyThrows
     void testSetOrderStatusIfDTOIsOk() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
         testDTO.setOrderAction(Status.DELIVERY_PENDING);
         Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenReturn(new FullOrderDTO());
-        mockMvc.perform(post("/order/status/{id}", 1).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/order/status/{id}", 1).with(csrf()).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(new FullOrderDTO())));
     }
     @Test
+    @WithMockUser(authorities = {"SCOPE_message.read"})
     @SneakyThrows
     void testSetOrderStatusIfThereIsNoDTOSomeRandomString() {
         String testString = "test";
@@ -60,6 +60,7 @@ public class OrderControllerMockMvcUnitTests {
                 .andExpect(status().is4xxClientError());
     }
     @Test
+    @WithMockUser(authorities = {"SCOPE_message.read"})
     @SneakyThrows
     void testSetOrderStatusIfDTOIsEmpty() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
@@ -69,6 +70,7 @@ public class OrderControllerMockMvcUnitTests {
                 .andExpect(status().is4xxClientError());
     }
     @Test
+    @WithMockUser(authorities = {"SCOPE_message.read"})
     @SneakyThrows
     void testSetOrderStatusIfDTOContainsWrongData() {
         @Data
@@ -82,6 +84,7 @@ public class OrderControllerMockMvcUnitTests {
                 .andExpect(status().is4xxClientError());
     }
     @Test
+    @WithMockUser(authorities = {"SCOPE_message.read"})
     @SneakyThrows
     void testSetOrderStatusIfIdIsNotNumeric() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
@@ -91,6 +94,7 @@ public class OrderControllerMockMvcUnitTests {
                 .andExpect(status().is4xxClientError());
     }
     @Test
+    @WithMockUser(authorities = {"SCOPE_message.read"})
     @SneakyThrows
     void testSetOrderStatusIfIdNotFound() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();

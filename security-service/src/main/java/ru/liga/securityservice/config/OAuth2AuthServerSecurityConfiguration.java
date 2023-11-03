@@ -45,6 +45,7 @@ public class OAuth2AuthServerSecurityConfiguration {
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http
+                .csrf().disable()
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(
                                 new LoginUrlAuthenticationEntryPoint("/login"))
