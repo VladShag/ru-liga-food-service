@@ -1,6 +1,8 @@
 package ru.liga.kitchenservice.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import ru.liga.common.entity.Order;
@@ -13,21 +15,23 @@ import ru.liga.kitchenservice.service.rabbitMQproducer.RabbitMQProducerServiceIm
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-
+    private final ObjectMapper mapper;
     private final OrderRepository orderRepository;
     private final RabbitMQProducerServiceImp rabbit;
+
     public OrderToKitchenDTO getOrderById(long id) {
         Order orderToPrepare = orderRepository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id " + id));
         OrderToKitchenDTO dto = new OrderToKitchenDTO();
         dto.setItemList(orderToPrepare.getItems());
         return dto;
     }
+    @SneakyThrows
     public void setOrderStatus(long id, Status status) {
         Order orderToChange = orderRepository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id " + id));
         orderToChange.setStatus(status.toString());
         orderRepository.save(orderToChange);
         if (Status.DELIVERY_PENDING.toString().equals(status.toString())) {
-            rabbit.sendMessage("New order with id " + orderToChange.getId() + "is waiting for delivery", "couriers");
+            rabbit.sendMessage(mapper.writeValueAsString(orderToChange), "couriers");
         }
         if(Status.KITCHEN_DENIED.toString().equals(status.toString())) {
             rabbit.sendMessage("Sorry, your order is being canceled", "customers");

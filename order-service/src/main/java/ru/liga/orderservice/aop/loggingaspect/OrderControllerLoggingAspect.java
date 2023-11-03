@@ -24,7 +24,7 @@ public class OrderControllerLoggingAspect {
                 Arrays.toString(jp.getArgs()));
     }
     @AfterReturning(pointcut = "setOrderStatusMethod()", returning = "result")
-    public void logSuсcessfulEnding(JoinPoint jp, Object result) {
+    public void logSuсcessfulEnding(Object result) {
         logger.info("[" + new Date() + "] Метод Метод установки статуса заказа завершился успешно и " +
                 "вернул " + result.toString());
     }

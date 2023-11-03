@@ -45,7 +45,7 @@ public class DeliveryService {
         return mapOrderToDelivery(order);
     }
 
-    private DeliveryDTO mapOrderToDelivery(Order order) {
+    public DeliveryDTO mapOrderToDelivery(Order order) {
         DeliveryDTO deliveryDTOToAdd = new DeliveryDTO();
         deliveryDTOToAdd.setCustomer(customerRepository.getCustomerById(order.getCustomerId()).orElseThrow(() -> new RuntimeException("test info")));
         deliveryDTOToAdd.setOrderId(order.getId());

@@ -34,8 +34,8 @@ public class DeliveryRestController {
     }
 
     @PostMapping("/{id}")
-    public FullOrderDTO setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
-        //Дописать маппер FullOrderDTO на DeliveryDTO
-        return feign.setOrderStatus(id, dto);
+    public DeliveryDTO setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
+        FullOrderDTO fullOrderDTO = feign.setOrderStatus(id, dto);
+        return service.getDeliveryById(fullOrderDTO.getId());
     }
 }

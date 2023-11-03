@@ -12,18 +12,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Locale;
 
-//@OpenAPIDefinition(
-//        info = @Info(
-//                title = "API сервиса заказов",
-//                description = "В данном разделе храняться методы для Order Service и вся документация по ним",
-//                version = "0.0.1",
-//                contact = @Contact(
-//                        name = "Vlad Shagalov",
-//                        email = "vladnnovgorod@yandex.ru"
-//                )
-//
-//        )
-//)
+
 public class OpenApiConfig {
     private SecurityScheme createApiKeyScheme() {
         return new SecurityScheme().type(SecurityScheme.Type.HTTP).bearerFormat("JWT").scheme("bearer");
