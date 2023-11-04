@@ -26,7 +26,7 @@ public class OrderService {
     private final RestaurantRepository restaurantRepository;
     private final OrderItemService orderItemService;
     private final RabbitMQProducerServiceImp rabbit;
-    private final long CUSTOMER_ID_MOCK = 13;
+    private final long CUSTOMER_ID_MOCK = 1;
     private final String MOSCOW_NAME = "Moscow";
 
     public MainOrderListDTO getAllOrders() {
@@ -102,6 +102,7 @@ public class OrderService {
         orderToChange.setStatus(status.toString());
         repository.save(orderToChange);
         FullOrderDTO dtoToGive = new FullOrderDTO();
+        dtoToGive.setId(orderToChange.getId());
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
