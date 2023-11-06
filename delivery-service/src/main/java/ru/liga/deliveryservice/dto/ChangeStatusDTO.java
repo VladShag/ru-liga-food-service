@@ -1,8 +1,6 @@
 package ru.liga.deliveryservice.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import ru.liga.common.entity.Status;
 
 import javax.validation.constraints.NotBlank;

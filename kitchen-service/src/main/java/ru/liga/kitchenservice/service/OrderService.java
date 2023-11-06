@@ -26,6 +26,7 @@ public class OrderService {
         dto.setItemList(orderToPrepare.getItems());
         return dto;
     }
+
     @SneakyThrows
     public void setOrderStatus(long id, Status status) {
         Order orderToChange = orderRepository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id " + id));
@@ -37,10 +38,11 @@ public class OrderService {
         if (Status.DELIVERY_PENDING.toString().equals(status.toString())) {
             rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), "couriers");
         }
-        if(Status.KITCHEN_DENIED.toString().equals(status.toString())) {
+        if (Status.KITCHEN_DENIED.toString().equals(status.toString())) {
             rabbit.sendMessage("Sorry, your order is being canceled", "customers");
         }
     }
+
     @RabbitListener(queues = "kitchen-service")
     public void processMyQueue(String message) {
         System.out.println(message);

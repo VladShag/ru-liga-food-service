@@ -12,20 +12,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestaurantMenuItemService {
     private final RestaurantMenuItemRepository repository;
+
     public List<RestaurantMenuItem> getAllMenuItems() {
         List<RestaurantMenuItem> items = repository.findAll();
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             throw new NoSuchEntityException("Res.Menu Item is empty!");
         }
         return items;
     }
+
     public List<RestaurantMenuItem> getAllMenuItemsByRestaurant(long resId) {
         List<RestaurantMenuItem> resMenu = repository.getRestaurantMenuItemByRestaurantId(resId);
-        if(resMenu.isEmpty()) {
+        if (resMenu.isEmpty()) {
             throw new NoSuchEntityException("Menu of restaurant with id " + resId + " is empty!");
         }
         return resMenu;
     }
+
     public RestaurantMenuItem saveMenuItem(RestaurantMenuItem item) {
         repository.save(item);
         return item;

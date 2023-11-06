@@ -16,6 +16,7 @@ import java.util.List;
 @Tag(name = "Клиенты", description = "В данном контроллере описаны методы для взаимодействия с профилями клиентов")
 public class CustomerRestController {
     private final CustomerService service;
+
     @GetMapping("/")
     @Operation(
             summary = "Список всех клиентов",
@@ -24,6 +25,7 @@ public class CustomerRestController {
     public List<Customer> getAllCustomers() {
         return service.getAllCustomers();
     }
+
     @GetMapping("/{id}")
     @Operation(
             summary = "Клиент по ID",
@@ -32,22 +34,25 @@ public class CustomerRestController {
     public Customer getCustomerById(@PathVariable("id") @Min(0) long id) {
         return service.getCustomerById(id);
     }
+
     @PostMapping("/")
     @Operation(
             summary = "Сохранить клиента",
             description = "Метод, позволяющий сохранить клиента в базе. Вся информация по клиенту передается в теле запроса."
     )
-    public Customer saveNewCustomer(@RequestBody Customer customer){
+    public Customer saveNewCustomer(@RequestBody Customer customer) {
         return service.saveNewCustomer(customer);
     }
+
     @PutMapping("/{id}")
     @Operation(
             summary = "Изменить данные клиента",
             description = "Метод, позволяющий изменить информацию о клиенте в базе. Вся информация по клиенту передается в теле запроса."
     )
-    public Customer changeCustomerInfo(@PathVariable("id")@Min(0) long id, @RequestBody Customer customer){
+    public Customer changeCustomerInfo(@PathVariable("id") @Min(0) long id, @RequestBody Customer customer) {
         return service.changeCustomerInfo(id, customer);
     }
+
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Удалить клиента",

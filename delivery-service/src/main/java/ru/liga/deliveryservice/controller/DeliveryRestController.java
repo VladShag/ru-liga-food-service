@@ -12,7 +12,6 @@ import ru.liga.deliveryservice.dto.FullOrderDTO;
 import ru.liga.deliveryservice.feign.CoreFeign;
 import ru.liga.deliveryservice.service.DeliveryService;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 

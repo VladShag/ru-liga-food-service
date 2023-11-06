@@ -6,7 +6,6 @@ import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
 import ru.liga.deliveryservice.dto.DeliveryDTO;
 import ru.liga.common.entity.Order;
-import ru.liga.common.entity.Status;
 import ru.liga.common.repository.CustomerRepository;
 import ru.liga.common.repository.OrderRepository;
 

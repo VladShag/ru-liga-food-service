@@ -15,6 +15,7 @@ import javax.validation.constraints.Min;
 public interface CoreFeign {
     @GetMapping("/order/{id}")
     FullOrderDTO getData(@PathVariable long id);
+
     @PostMapping("/order/{id}")
-    FullOrderDTO setOrderStatus(@PathVariable("id") @Min(0) long id, @RequestBody@Valid ChangeStatusDTO dto);
+    FullOrderDTO setOrderStatus(@PathVariable("id") @Min(0) long id, @RequestBody @Valid ChangeStatusDTO dto);
 }

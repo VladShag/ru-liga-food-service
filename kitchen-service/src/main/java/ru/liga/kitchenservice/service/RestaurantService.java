@@ -15,16 +15,19 @@ public class RestaurantService {
     public Restaurant getRestaurantById(long id) {
         return restaurantMapper.getRestaurantById(id);
     }
+
     public void saveRestaurant(Restaurant res) {
         restaurantMapper.saveRestaurant(res);
     }
+
     public void deleteRestaurant(long id) {
         Restaurant res = restaurantMapper.getRestaurantById(id);
-        if(res == null) {
+        if (res == null) {
             throw new NoSuchEntityException("There is no restaurant with id " + id);
         }
         restaurantMapper.deleteRestaurantById(id);
     }
+
     public void changeRestaurantStatus(long id, String status) {
         restaurantMapper.updateRestaurantStatus(id, status);
     }

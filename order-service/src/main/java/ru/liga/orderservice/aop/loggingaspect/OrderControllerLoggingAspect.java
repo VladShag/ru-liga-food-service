@@ -15,22 +15,26 @@ import java.util.Date;
 @Aspect
 public class OrderControllerLoggingAspect {
     private final Logger logger = LogManager.getLogger(OrderControllerLoggingAspect.class);
+
     @Pointcut("execution(* ru.liga.orderservice.controller.OrderRestController.setOrderStatus(..))")
-    public void setOrderStatusMethod(){
+    public void setOrderStatusMethod() {
     }
+
     @Before("setOrderStatusMethod()")
     public void logCallOfMethod(JoinPoint jp) {
         logger.info("[" + new Date() + "] Метод установки статуса заказа вызывается. В него передаются данные: " +
                 Arrays.toString(jp.getArgs()));
     }
+
     @AfterReturning(pointcut = "setOrderStatusMethod()", returning = "result")
     public void logSuсcessfulEnding(Object result) {
         logger.info("[" + new Date() + "] Метод Метод установки статуса заказа завершился успешно и " +
                 "вернул " + result.toString());
     }
+
     @AfterThrowing(pointcut = "setOrderStatusMethod()", throwing = "exception")
     public void logExceptionEnding(Throwable exception) {
         logger.info("[" + new Date() + "] Метод установки статуса заказа завершился неудачно, вызвав ошибку " +
-                 exception.getClass().getName() + " с сообщением " + exception.getMessage());
-           }
+                exception.getClass().getName() + " с сообщением " + exception.getMessage());
+    }
 }

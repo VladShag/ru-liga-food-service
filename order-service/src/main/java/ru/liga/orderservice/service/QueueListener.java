@@ -9,6 +9,7 @@ import ru.liga.orderservice.service.rabbitMQproducer.RabbitMQProducerServiceImp;
 @RequiredArgsConstructor
 public class QueueListener {
     private final RabbitMQProducerServiceImp rabbit;
+
     @RabbitListener(queues = "customers")
     public void processMyQueue(String message) {
         System.out.println(message);

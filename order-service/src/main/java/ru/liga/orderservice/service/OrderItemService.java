@@ -38,9 +38,10 @@ public class OrderItemService {
         }
         return orderItems;
     }
+
     public List<OrderItem> getOrderItemsByOrderId(long orderId) {
         List<OrderItem> items = repository.getOrderItemByOrder_Id(orderId);
-        if(items.isEmpty()) {
+        if (items.isEmpty()) {
             throw new NoSuchEntityException("There is no Items in Order with id: " + orderId);
         }
         return items;

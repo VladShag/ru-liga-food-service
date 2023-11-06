@@ -3,7 +3,6 @@ package ru.liga.kitchenservice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.common.entity.Status;
@@ -20,6 +19,7 @@ import javax.validation.constraints.Min;
 @Tag(name = "Кухня", description = "В данном контроллере описаны методы для взаимодействия с заказами из кухни")
 public class OrderController {
     private final OrderService service;
+
     @GetMapping("/{id}")
     @Operation(
             summary = "Получить заказ по ID",

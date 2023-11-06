@@ -13,26 +13,30 @@ import java.util.List;
 public class CourierService {
     private final CourierRepository repository;
 
-    public List<Courier> getAllCouriers(){
+    public List<Courier> getAllCouriers() {
         List<Courier> allCouriers = repository.findAll();
-        if(allCouriers.isEmpty()){
+        if (allCouriers.isEmpty()) {
             throw new NoSuchEntityException("Courier list is empty!");
         }
         return allCouriers;
     }
+
     public Courier getCourierById(long id) {
         return repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));
     }
-    public Courier saveCourier(Courier courier){
+
+    public Courier saveCourier(Courier courier) {
         repository.save(courier);
         return courier;
     }
+
     public Courier setCourierStatus(long id, String status) {
         Courier courier = repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));
         courier.setStatus(status);
         repository.save(courier);
         return repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));
     }
+
     public String deleteCourier(long id) {
         Courier courier = repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));
         repository.deleteById(id);

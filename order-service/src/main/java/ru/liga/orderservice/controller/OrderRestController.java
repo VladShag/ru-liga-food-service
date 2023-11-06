@@ -5,15 +5,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.yaml.snakeyaml.util.EnumUtils;
 import ru.liga.orderservice.dto.*;
 import ru.liga.common.entity.Status;
 import ru.liga.orderservice.service.OrderService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +35,7 @@ public class OrderRestController {
             description = "Метод позволяющий получить конкретный заказ по его id." +
                     "Выводит информацию в виде DTO полной информации о заказе"
     )
-    public FullOrderDTO getOrderById(@PathVariable("id")@Parameter(description = "ID заказа") @Min(0) long id) {
+    public FullOrderDTO getOrderById(@PathVariable("id") @Parameter(description = "ID заказа") @Min(0) long id) {
         return service.getOrderById(id);
     }
 
@@ -48,7 +45,7 @@ public class OrderRestController {
             description = "Метод, выводящий все заказы по конкретному статусу, который задан в качестве параметра. " +
                     "Выводит список в виде DTO"
     )
-    public MainOrderListDTO getOrdersByStatus(@RequestParam("status")@Parameter(description = "Статус заказа") Status status) {
+    public MainOrderListDTO getOrdersByStatus(@RequestParam("status") @Parameter(description = "Статус заказа") Status status) {
         return service.getOrdersByStatus(status);
     }
 
@@ -68,7 +65,7 @@ public class OrderRestController {
             description = "Метод позволяющий установить статус заказа, новый статус передается в DTO, которая передается в теле запроса. " +
                     "В ответ при удачной отработке метода выводится вся информация о заказе"
     )
-    public FullOrderDTO setOrderStatus(@PathVariable("id")@Parameter(description = "ID заказа") @Min(0) long id, @RequestBody  @Parameter(description = "DTO для смены статуса") @Valid ChangeStatusDTO dto) {
+    public FullOrderDTO setOrderStatus(@PathVariable("id") @Parameter(description = "ID заказа") @Min(0) long id, @RequestBody @Parameter(description = "DTO для смены статуса") @Valid ChangeStatusDTO dto) {
         Status status = dto.getOrderAction();
         return service.setOrderStatus(id, status);
     }
