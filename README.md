@@ -3,50 +3,29 @@
 <br>
 
 - Dependency Bom
-<br>
 - Common
-<br>
 - Migration
-<br>
 - Security Service
-<br>
 - Order Service
-<br>
 - Kitchen Service
-<br>
 - Delivery Service
-<br>
 - Cloud Gateway
-<br>
 - Notification Service
 <h3>Использованные технологии:</h3>
 
 - Java 11 
-<br>
 - Spring Boot
-<br>
 - Spring Data JPA
-<br>
 - Spring Security
-<br>
 - Spring Web
-<br>
 - LiquiBase
-<br>
 - PostgreSQL
-<br>
 - MyBatis
-<br>
 - Lombok
-<br>
 - RabbitMQ
-<br>
 - Feign
-<br>
 - Swagger
-<br>
 - Slf4j + Log4j
-<br>
 - JUnit 
 
 
