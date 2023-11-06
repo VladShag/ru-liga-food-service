@@ -128,7 +128,4 @@ public class OrderService {
     public Order checkIfOrderExist(long id) {
         return repository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + id));
     }
-    private void sendMessageByStatus(Order order) {
-
-    }
 }

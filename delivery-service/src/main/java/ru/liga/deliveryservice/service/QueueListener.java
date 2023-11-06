@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import ru.liga.common.entity.Courier;
+import ru.liga.common.entity.CourierStatus;
 import ru.liga.common.entity.Order;
 import ru.liga.common.repository.CourierRepository;
 import ru.liga.common.repository.OrderRepository;
@@ -38,6 +39,8 @@ public class QueueListener {
             if(Objects.equals(courierLength, length) && Objects.equals(courierWidth, width) && courier.getStatus().equals("COURIER_ACTIVE")){
                 order.setCourierId(courier.getId());
                 orderRepository.save(order);
+                courier.setStatus(CourierStatus.COURIER_BUSY.toString());
+                courierRepository.save(courier);
                 System.out.println("Courier with id " + courier.getId() + " will delieve order with id " + order.getId());
             }
         }

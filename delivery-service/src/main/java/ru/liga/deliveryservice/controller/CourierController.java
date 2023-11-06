@@ -3,6 +3,8 @@ package ru.liga.deliveryservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.common.entity.Courier;
+import ru.liga.common.entity.CourierStatus;
+import ru.liga.deliveryservice.dto.ChangeCouriersStatusDTO;
 import ru.liga.deliveryservice.dto.ChangeStatusDTO;
 import ru.liga.deliveryservice.service.CourierService;
 
@@ -28,8 +30,8 @@ public class CourierController {
         return service.saveCourier(courier);
     }
     @PutMapping("/{id}")
-    public Courier setCourierStatus(@PathVariable("id")@Min(0)long id, @RequestBody ChangeStatusDTO status){
-        return service.setCourierStatus(id, status.getOrderAction().toString());
+    public Courier setCourierStatus(@PathVariable("id")@Min(0)long id, @RequestBody ChangeCouriersStatusDTO status){
+        return service.setCourierStatus(id, status.getCourierStatus().toString());
     }
     @DeleteMapping("/{id}")
     public String deleteCourier(@PathVariable("id")@Min(0)long id){

@@ -2,6 +2,7 @@ package ru.liga.deliveryservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
 import ru.liga.deliveryservice.dto.DeliveryDTO;
 import ru.liga.common.entity.Order;
@@ -33,21 +34,14 @@ public class DeliveryService {
         return delieveryListDTO;
     }
 
-    public DeliveryDTO setDeliveryStatus(long id, Status status) {
-        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new RuntimeException("test info"));
-        order.setStatus(status.toString());
-        orderRepository.save(order);
-        return mapOrderToDelivery(order);
-    }
-
     public DeliveryDTO getDeliveryById(long id) {
-        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new RuntimeException("test info"));
+        Order order = orderRepository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with ID: " + id));
         return mapOrderToDelivery(order);
     }
 
     public DeliveryDTO mapOrderToDelivery(Order order) {
         DeliveryDTO deliveryDTOToAdd = new DeliveryDTO();
-        deliveryDTOToAdd.setCustomer(customerRepository.getCustomerById(order.getCustomerId()).orElseThrow(() -> new RuntimeException("test info")));
+        deliveryDTOToAdd.setCustomer(customerRepository.getCustomerById(order.getCustomerId()).orElseThrow(() -> new NoSuchEntityException("There is no customer with ID: " + order.getCustomerId())));
         deliveryDTOToAdd.setOrderId(order.getId());
         deliveryDTOToAdd.setRestaurant(order.getRestaurant());
         deliveryDTOToAdd.setPayment(DELIVERY_PAYMENT);

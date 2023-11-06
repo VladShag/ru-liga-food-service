@@ -29,8 +29,8 @@ public class OrderControllerLoggingAspect {
                 "вернул " + result.toString());
     }
     @AfterThrowing(pointcut = "setOrderStatusMethod()", throwing = "exception")
-    public void logExceptionEnding(JoinPoint jp, Throwable exception) {
+    public void logExceptionEnding(Throwable exception) {
         logger.info("[" + new Date() + "] Метод установки статуса заказа завершился неудачно, вызвав ошибку " +
-                 exception.getClass().getName() + " с сообщением " + exception.getMessage() + " и StackTrace " + Arrays.toString(exception.getStackTrace()));
+                 exception.getClass().getName() + " с сообщением " + exception.getMessage());
            }
 }
