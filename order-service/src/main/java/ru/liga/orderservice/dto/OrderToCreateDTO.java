@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Schema(description = "DTO для создания заказа")
 public class OrderToCreateDTO {
     @NotNull
+    @Min(0)
     @Schema(description = "Идентификатор ресторана")
     private long restaurantId;
     @NotEmpty

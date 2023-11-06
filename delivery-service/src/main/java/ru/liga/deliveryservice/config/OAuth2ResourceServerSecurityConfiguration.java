@@ -10,14 +10,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
 public class OAuth2ResourceServerSecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .mvcMatcher("/delivery/**")
+                .csrf().disable()
+                .mvcMatcher("/**")
                 .authorizeRequests()
-                .mvcMatchers("/delivery/**")
+                .mvcMatchers("/**")
                 .access("hasAuthority('SCOPE_message.read')")
                 .and()
                 .oauth2ResourceServer()

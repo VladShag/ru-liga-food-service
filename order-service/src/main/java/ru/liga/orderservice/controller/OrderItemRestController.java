@@ -24,7 +24,7 @@ public class OrderItemRestController {
             summary = "Позиция по ID",
             description = "Метод, позволяющий получить позицию заказа по идентификатору"
     )
-    public OrderItem getOrderItemById(@PathVariable("id")@Parameter(description = "ID позиции в заказе") long id) {
+    public OrderItem getOrderItemById(@PathVariable("id")@Parameter(description = "ID позиции в заказе") @Min(0) long id) {
         return service.getItemById(id);
     }
     @GetMapping("/order/{id}")
@@ -42,7 +42,7 @@ public class OrderItemRestController {
             summary = "Удалить позицию",
             description = "Метод, позволяющий удалить позицию из заказа"
     )
-    public void deleteOrderItemById(@PathVariable("id")@Parameter(description = "ID позиции в заказе") long id) {
+    public void deleteOrderItemById(@PathVariable("id")@Parameter(description = "ID позиции в заказе") @Min(0) long id) {
         service.deleteItemById(id);
     }
 }

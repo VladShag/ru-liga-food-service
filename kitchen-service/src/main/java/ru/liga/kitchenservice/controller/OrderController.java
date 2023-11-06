@@ -11,6 +11,9 @@ import ru.liga.kitchenservice.dto.ChangeStatusDTO;
 import ru.liga.kitchenservice.dto.OrderToKitchenDTO;
 import ru.liga.kitchenservice.service.OrderService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/kitchen")
@@ -22,7 +25,7 @@ public class OrderController {
             summary = "Получить заказ по ID",
             description = "Метод, позволяющий получить заказ на доставку по ID"
     )
-    public OrderToKitchenDTO getOrderById(@PathVariable("id") long id) {
+    public OrderToKitchenDTO getOrderById(@PathVariable("id") @Min(0) long id) {
         return service.getOrderById(id);
     }
 
@@ -32,7 +35,7 @@ public class OrderController {
             summary = "Установить статус доставки",
             description = "Метод, позволяющий установить статус заказа"
     )
-    public void setDeliveryStatus(@PathVariable("id") long id, @RequestBody ChangeStatusDTO dto) {
+    public void setDeliveryStatus(@PathVariable("id") @Min(0) long id, @RequestBody @Valid ChangeStatusDTO dto) {
         Status status = dto.getOrderAction();
         service.setOrderStatus(id, status);
     }

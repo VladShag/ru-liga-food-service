@@ -38,7 +38,7 @@ public class OrderRestController {
             description = "Метод позволяющий получить конкретный заказ по его id." +
                     "Выводит информацию в виде DTO полной информации о заказе"
     )
-    public FullOrderDTO getOrderById(@PathVariable("id")@Parameter(description = "ID заказа") long id) {
+    public FullOrderDTO getOrderById(@PathVariable("id")@Parameter(description = "ID заказа") @Min(0) long id) {
         return service.getOrderById(id);
     }
 
@@ -58,7 +58,7 @@ public class OrderRestController {
             description = "Метод, в теле которого передается DTO создания нового заказа и заказ сохраняется в БД. " +
                     "Обратно при удачной работе метода выводит DTO с id заказа, ссылкой на оплату и временем доставки"
     )
-    public OrderCreatedDTO addNewOrder(@RequestBody @Parameter(description = "DTO для создания заказа") OrderToCreateDTO dto) {
+    public OrderCreatedDTO addNewOrder(@RequestBody @Parameter(description = "DTO для создания заказа") @Valid OrderToCreateDTO dto) {
         return service.addNewOrder(dto);
     }
 

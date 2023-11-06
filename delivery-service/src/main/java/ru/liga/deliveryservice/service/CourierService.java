@@ -24,9 +24,8 @@ public class CourierService {
         return repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));
     }
     public Courier saveCourier(Courier courier){
-        long id = courier.getId();
         repository.save(courier);
-        return repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));
+        return courier;
     }
     public Courier setCourierStatus(long id, String status) {
         Courier courier = repository.getCourierById(id).orElseThrow(() -> new NoSuchEntityException("There is no courier with id: " + id));

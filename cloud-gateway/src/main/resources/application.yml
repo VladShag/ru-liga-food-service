@@ -29,13 +29,6 @@ spring:
             - TokenRelay=
             - RemoveRequestHeader=Cookie
             - RewritePath=/kitchen/(?<path>.*), /$\{path}
-        - id: swagger
-          uri: http://localhost:9001/
-          predicates:
-            - Path=/**
-          filters:
-            - TokenRelay=
-            - RemoveRequestHeader=Cookie
 
   security:
     oauth2:
