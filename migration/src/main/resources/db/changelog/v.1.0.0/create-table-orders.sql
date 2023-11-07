@@ -1,8 +1,6 @@
-create sequence if not exists orders_seq;
-
 create table if not exists orders
 (
-    id bigint not null default nextval('orders_seq'),
+    id uuid,
     customer_id bigint not null,
     restaurant_id bigint not null,
     status varchar(64) not null,

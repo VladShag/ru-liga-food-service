@@ -7,7 +7,6 @@ import ru.liga.orderservice.dto.OrderToCreateDTO;
 import ru.liga.common.entity.Order;
 import ru.liga.common.entity.OrderItem;
 import ru.liga.common.entity.RestaurantMenuItem;
-import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.common.repository.OrderItemRepository;
 import ru.liga.common.repository.RestaurantMenuItemRepository;
 
@@ -37,22 +36,5 @@ public class OrderItemService {
             }
         }
         return orderItems;
-    }
-
-    public List<OrderItem> getOrderItemsByOrderId(long orderId) {
-        List<OrderItem> items = repository.getOrderItemByOrder_Id(orderId);
-        if (items.isEmpty()) {
-            throw new NoSuchEntityException("There is no Items in Order with id: " + orderId);
-        }
-        return items;
-    }
-
-    public OrderItem getItemById(long id) {
-        return repository.getOrderItemById(id).orElseThrow(() -> new NoSuchEntityException("There is no order item this id: " + id));
-    }
-
-    public void deleteItemById(long id) {
-        repository.getOrderItemById(id).orElseThrow(() -> new NoSuchEntityException("There is no order item this id: " + id));
-        repository.deleteById(id);
     }
 }

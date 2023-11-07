@@ -1,15 +1,19 @@
 package ru.liga.orderservice.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import ru.liga.orderservice.dto.*;
+
+import ru.liga.common.dto.RabbitSendOrderDTO;
 import ru.liga.common.entity.Order;
 import ru.liga.common.entity.OrderItem;
 import ru.liga.common.entity.Status;
 import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.common.repository.OrderRepository;
 import ru.liga.common.repository.RestaurantRepository;
+import ru.liga.orderservice.dto.*;
 import ru.liga.orderservice.service.rabbitMQproducer.RabbitMQProducerServiceImp;
 
 
@@ -18,6 +22,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +32,14 @@ public class OrderService {
     private final OrderItemService orderItemService;
     private final RabbitMQProducerServiceImp rabbit;
     private final long CUSTOMER_ID_MOCK = 1;
-    private final String MOSCOW_NAME = "Moscow";
+    private final String ROUTING_KEY_NOTIFICATION = "notification";
+    private final ObjectMapper mapper;
 
     public MainOrderListDTO getAllOrders() {
         List<Order> orders = repository.findAll();
+        if(orders.isEmpty()) {
+            throw new NoSuchEntityException("There is no orders!");
+        }
         MainOrderListDTO DTOToReturn = new MainOrderListDTO();
         List<FullOrderDTO> listToReturn = new ArrayList<>();
         for (Order orderInRepo : orders) {
@@ -45,7 +54,7 @@ public class OrderService {
         return DTOToReturn;
     }
 
-    public FullOrderDTO getOrderById(long id) {
+    public FullOrderDTO getOrderById(UUID id) {
         Order order = checkIfOrderExist(id);
         FullOrderDTO orderDTO = new FullOrderDTO();
         orderDTO.setId(order.getId());
@@ -55,31 +64,6 @@ public class OrderService {
         return orderDTO;
     }
 
-    public MainOrderListDTO getOrdersByStatus(Status status) {
-        String statusToString = status.toString();
-        List<Order> ordersByStatus = repository.findOrdersByStatus(statusToString);
-        if (ordersByStatus.isEmpty()) {
-            throw new NoSuchEntityException("There is no orders with status " + status);
-        }
-        List<OrderByStatusDTO> orderByStatusDTOS = new ArrayList<>();
-        for (Order orderInRepo : ordersByStatus) {
-            OrderByStatusDTO newOrder = new OrderByStatusDTO();
-            newOrder.setId(orderInRepo.getId());
-            List<ItemToAddDTO> itemList = new ArrayList<>();
-            for (OrderItem i : orderInRepo.getItems()) {
-                ItemToAddDTO itemDTO = new ItemToAddDTO();
-                itemDTO.setMenuItemId(i.getRestaurantMenuItem().getId());
-                itemDTO.setQuantity(i.getQuantity());
-                itemList.add(itemDTO);
-            }
-            newOrder.setMenuItems(itemList);
-            orderByStatusDTOS.add(newOrder);
-        }
-        MainOrderListDTO listToReturnDTO = new MainOrderListDTO();
-        listToReturnDTO.setOrders(orderByStatusDTOS);
-        return listToReturnDTO;
-    }
-
     public OrderCreatedDTO addNewOrder(@Valid OrderToCreateDTO dto) {
         Order orderToAdd = new Order();
         orderToAdd.setTimestamp(new Date());
@@ -87,8 +71,11 @@ public class OrderService {
         if (restaurantRepository.findRestaurantById(dto.getRestaurantId()).isPresent()) {
             orderToAdd.setRestaurant(restaurantRepository.findRestaurantById(dto.getRestaurantId()).get());
             orderToAdd.setStatus(Status.CUSTOMER_CREATED.toString());
-            orderToAdd.setCustomerId(CUSTOMER_ID_MOCK); //заглушка пока не будет авторизации и автоматического присвоения id клиента
+            orderToAdd.setCustomerId(CUSTOMER_ID_MOCK);
+            UUID id = UUID.randomUUID();
+            orderToAdd.setId(id);
             repository.save(orderToAdd);
+            rabbit.sendMessage("Новый заказ с id" + id + " создан!", ROUTING_KEY_NOTIFICATION);
             orderToAdd.setItems(orderItemService.addNewOrderItems(dto, orderToAdd));
             orderCreatedDTO.setId(1);
             orderCreatedDTO.setSecretPaymentUrl("Some test string");
@@ -96,18 +83,22 @@ public class OrderService {
         }
         return orderCreatedDTO;
     }
-
-    public FullOrderDTO setOrderStatus(long id, Status status) {
+    @SneakyThrows
+    public FullOrderDTO setOrderStatus(UUID id, String status) {
         Order orderToChange = checkIfOrderExist(id);
-        orderToChange.setStatus(status.toString());
+        orderToChange.setStatus(status);
         repository.save(orderToChange);
         FullOrderDTO dtoToGive = new FullOrderDTO();
         dtoToGive.setId(orderToChange.getId());
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
-        if (Status.CUSTOMER_PAID.toString().equals(status.toString())) {
-            rabbit.sendMessage("New order with id: " + orderToChange.getId() + " is waiting for acception", "restaurants");
+        RabbitSendOrderDTO dtoToSent = new RabbitSendOrderDTO();
+        dtoToSent.setOrderId(orderToChange.getId());
+        if (Status.CUSTOMER_PAID.toString().equals(status)) {
+            dtoToSent.setQueueToSend("kitchen-service");
+            dtoToSent.setMessage("Заказ был оплачен, ожидает подтверждения ресторана!");
+            rabbit.sendMessage(mapper.writeValueAsString(dtoToSent), ROUTING_KEY_NOTIFICATION);
         }
         return dtoToGive;
     }
@@ -125,7 +116,7 @@ public class OrderService {
         return itemDTOList;
     }
 
-    public Order checkIfOrderExist(long id) {
+    public Order checkIfOrderExist(UUID id) {
         return repository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + id));
     }
 }

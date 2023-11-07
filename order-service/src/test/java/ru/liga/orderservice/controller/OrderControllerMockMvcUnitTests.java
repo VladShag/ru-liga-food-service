@@ -44,8 +44,8 @@ public class OrderControllerMockMvcUnitTests {
     @SneakyThrows
     void testSetOrderStatusIfDTOIsOk() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
-        testDTO.setOrderAction(Status.DELIVERY_PENDING);
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenReturn(new FullOrderDTO());
+        testDTO.setOrderAction(Status.DELIVERY_PENDING.toString());
+        Mockito.when(orderService.setOrderStatus(Mockito.any(), Mockito.any())).thenReturn(new FullOrderDTO());
         mockMvc.perform(post("/order/status/{id}", 1).with(csrf()).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(new FullOrderDTO())));
@@ -55,7 +55,7 @@ public class OrderControllerMockMvcUnitTests {
     @SneakyThrows
     void testSetOrderStatusIfThereIsNoDTOSomeRandomString() {
         String testString = "test";
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenReturn(new FullOrderDTO());
+        Mockito.when(orderService.setOrderStatus(Mockito.any(), Mockito.any())).thenReturn(new FullOrderDTO());
         mockMvc.perform(post("/order/status/{id}", 1).content(getJsonFromObject(testString)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
@@ -65,7 +65,7 @@ public class OrderControllerMockMvcUnitTests {
     void testSetOrderStatusIfDTOIsEmpty() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
         testDTO.setOrderAction(null);
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenReturn(new FullOrderDTO());
+        Mockito.when(orderService.setOrderStatus(Mockito.any(), Mockito.any())).thenReturn(new FullOrderDTO());
         mockMvc.perform(post("/order/status/{id}", 1).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
@@ -79,7 +79,7 @@ public class OrderControllerMockMvcUnitTests {
         }
         TestChangeStatusDTO testDTO = new TestChangeStatusDTO();
         testDTO.setOrderAction("random");
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenReturn(new FullOrderDTO());
+        Mockito.when(orderService.setOrderStatus(Mockito.any(), Mockito.any())).thenReturn(new FullOrderDTO());
         mockMvc.perform(post("/order/status/{id}", 1).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
@@ -88,8 +88,8 @@ public class OrderControllerMockMvcUnitTests {
     @SneakyThrows
     void testSetOrderStatusIfIdIsNotNumeric() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
-        testDTO.setOrderAction(Status.DELIVERY_PENDING);
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenReturn(new FullOrderDTO());
+        testDTO.setOrderAction(Status.DELIVERY_PENDING.toString());
+        Mockito.when(orderService.setOrderStatus(Mockito.any(), Mockito.any())).thenReturn(new FullOrderDTO());
         mockMvc.perform(post("/order/status/{id}", "testInfo").content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
@@ -98,8 +98,8 @@ public class OrderControllerMockMvcUnitTests {
     @SneakyThrows
     void testSetOrderStatusIfIdNotFound() {
         ChangeStatusDTO testDTO = new ChangeStatusDTO();
-        testDTO.setOrderAction(Status.DELIVERY_PENDING);
-        Mockito.when(orderService.setOrderStatus(anyLong(), ArgumentMatchers.any(Status.class))).thenThrow(new NoSuchEntityException("test info"));
+        testDTO.setOrderAction(Status.DELIVERY_PENDING.toString());
+        Mockito.when(orderService.setOrderStatus(Mockito.any(), Mockito.any())).thenThrow(new NoSuchEntityException("test info"));
         mockMvc.perform(post("/order/status/{id}", 50).content(getJsonFromObject(testDTO)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }

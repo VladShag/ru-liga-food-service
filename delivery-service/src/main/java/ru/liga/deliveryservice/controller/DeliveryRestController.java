@@ -5,15 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.liga.deliveryservice.dto.ChangeStatusDTO;
+import ru.liga.common.entity.Status;
 import ru.liga.deliveryservice.dto.DelieveryListDTO;
 import ru.liga.deliveryservice.dto.DeliveryDTO;
-import ru.liga.deliveryservice.dto.FullOrderDTO;
-import ru.liga.deliveryservice.feign.CoreFeign;
 import ru.liga.deliveryservice.service.DeliveryService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,34 +20,32 @@ import javax.validation.constraints.Min;
 @Tag(name = "Доставки", description = "В данном контроллере описаны методы для взаимодействия с заказами на доставке")
 public class DeliveryRestController {
     private final DeliveryService service;
-    private final CoreFeign feign;
-
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_COURIER')")
-    @Operation(
-            summary = "Получить заказ по ID",
-            description = "Метод, позволяющий получить заказ на доставку по ID"
-    )
-    public DeliveryDTO getDeliveryById(@PathVariable("id") @Min(0) long id) {
-        return service.getDeliveryById(id);
-    }
-
     @GetMapping("/")
     @Operation(
             summary = "Получить заказы по cтатусу",
             description = "Метод, позволяющий получить список заказов на доставку по статусу"
     )
-    public DelieveryListDTO getDeliveriesByStatus(@RequestParam("status") String status) {
+    public DelieveryListDTO getDeliveriesByStatus() {
+        String status = Status.DELIVERY_PENDING.toString();
         return service.getDeliveriesByStatus(status);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/take")
+    @PreAuthorize("hasAuthority('ROLE_COURIER')")
     @Operation(
-            summary = "Установить статус доставки",
-            description = "Метод, позволяющий установить статус заказа"
+            summary = "Принять заказ",
+            description = "Метод, позволяющий принять заказ на доставку по ID"
     )
-    public DeliveryDTO setDeliveryStatus(@PathVariable("id") @Min(0) long id, @RequestBody @Valid ChangeStatusDTO dto) {
-        FullOrderDTO fullOrderDTO = feign.setOrderStatus(id, dto);
-        return service.getDeliveryById(fullOrderDTO.getId());
+    public DeliveryDTO acceptDelivery(@PathVariable("id") @Min(0) UUID id) {
+        return service.setDeliveryStatus(id, Status.DELIVERY_PICKING.toString());
+    }
+    @PostMapping("/{id}/complete")
+    @PreAuthorize("hasAuthority('ROLE_COURIER')")
+    @Operation(
+            summary = "Принять заказ",
+            description = "Метод, позволяющий принять заказ на доставку по ID"
+    )
+    public DeliveryDTO completeDelivery(@PathVariable("id") @Min(0) UUID id) {
+        return service.setDeliveryStatus(id, Status.DELIVERY_COMPLETE.toString());
     }
 }

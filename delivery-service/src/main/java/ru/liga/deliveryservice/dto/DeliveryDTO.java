@@ -5,6 +5,7 @@ import ru.liga.common.entity.Customer;
 import ru.liga.common.entity.Restaurant;
 
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 
 @Data
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class DeliveryDTO {
     @NotNull
-    private long orderId;
+    private UUID orderId;
     @NotNull
     private Restaurant restaurant;
     @NotNull

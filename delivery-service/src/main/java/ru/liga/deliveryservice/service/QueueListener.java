@@ -5,17 +5,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
+import ru.liga.common.dto.RabbitSendOrderDTO;
 import ru.liga.common.entity.Courier;
 import ru.liga.common.entity.CourierStatus;
 import ru.liga.common.entity.Order;
 import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.common.repository.CourierRepository;
 import ru.liga.common.repository.OrderRepository;
-import ru.liga.deliveryservice.dto.OrderToDeliveryServiceDTO;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,16 +27,17 @@ public class QueueListener {
     @SneakyThrows
     public void processMyQueue(String message) {
         System.out.println("New order is waiting for delivery!");
-        OrderToDeliveryServiceDTO order = mapper.readValue(message, OrderToDeliveryServiceDTO.class);
+        RabbitSendOrderDTO dtoAccepted = mapper.readValue(message, RabbitSendOrderDTO.class);
+        Order order = orderRepository.findOrderById(dtoAccepted.getOrderId()).orElseThrow(() -> new NoSuchEntityException("There is no order with such id!"));
         setCourierToOrder(order);
     }
 
-    private void setCourierToOrder(OrderToDeliveryServiceDTO orderDTO) {
-        String coordinates = orderDTO.getRestaurantCoordinates();
+    private void setCourierToOrder(Order order) {
+        String coordinates = order.getRestaurant().getCoordinates();
         List<Courier> couriers = courierRepository.findAll();
         double minDist = Double.MAX_VALUE;
         long courierIdToPut = 0;
-        Order orderToSetCourier = orderRepository.findOrderById(orderDTO.getId()).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + orderDTO.getId()));
+        Order orderToSetCourier = orderRepository.findOrderById(order.getId()).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + order.getId()));
         for (Courier courier : couriers) {
             if (courier.getStatus().equals("COURIER_ACTIVE")) {
                 double distance = calcDistance(coordinates, courier.getCoordinates());

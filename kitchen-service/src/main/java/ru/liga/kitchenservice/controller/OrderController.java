@@ -6,12 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.common.entity.Status;
-import ru.liga.kitchenservice.dto.ChangeStatusDTO;
 import ru.liga.kitchenservice.dto.OrderToKitchenDTO;
 import ru.liga.kitchenservice.service.OrderService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -20,23 +19,28 @@ import javax.validation.constraints.Min;
 public class OrderController {
     private final OrderService service;
 
-    @GetMapping("/{id}")
+    @PostMapping("/{id}/accept")
     @Operation(
-            summary = "Получить заказ по ID",
+            summary = "Принять заказ по ID",
             description = "Метод, позволяющий получить заказ на доставку по ID"
     )
-    public OrderToKitchenDTO getOrderById(@PathVariable("id") @Min(0) long id) {
-        return service.getOrderById(id);
+    public OrderToKitchenDTO acceptOrder(@PathVariable("id") @Min(0) UUID id) {
+        return service.setOrderStatus(id, Status.KITCHEN_ACCEPTED.toString());
     }
-
-
-    @PostMapping("/status/{id}")
+    @PostMapping("/{id}/decline")
     @Operation(
-            summary = "Установить статус доставки",
-            description = "Метод, позволяющий установить статус заказа"
+            summary = "Отклонить заказ по ID",
+            description = "Метод, позволяющий получить заказ на доставку по ID"
     )
-    public void setDeliveryStatus(@PathVariable("id") @Min(0) long id, @RequestBody @Valid ChangeStatusDTO dto) {
-        Status status = dto.getOrderAction();
-        service.setOrderStatus(id, status);
+    public OrderToKitchenDTO declineOrder(@PathVariable("id") @Min(0) UUID id) {
+        return service.setOrderStatus(id, Status.KITCHEN_DENIED.toString());
+    }
+    @PostMapping("/{id}/ready")
+    @Operation(
+            summary = "Отклонить заказ по ID",
+            description = "Метод, позволяющий получить заказ на доставку по ID"
+    )
+    public OrderToKitchenDTO endOrder(@PathVariable("id") @Min(0) UUID id) {
+        return service.setOrderStatus(id, Status.DELIVERY_PENDING.toString());
     }
 }

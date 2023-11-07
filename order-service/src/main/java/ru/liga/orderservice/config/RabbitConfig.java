@@ -20,15 +20,11 @@ public class RabbitConfig {
         cachingConnectionFactory.setPassword("guest");
         return cachingConnectionFactory;
     }
-
-    //AmqpAdmin занимается обслуживанием очередей, обменника, сообщений
     @Bean
     public AmqpAdmin amqpAdmin() {
         return new RabbitAdmin(connectionFactory());
     }
 
-    //RabbitTemplate основной класс для отправки сообщения, так же имеет гибкие настройки, такие как
-    //явное указание типа конвертации.
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
@@ -38,10 +34,10 @@ public class RabbitConfig {
 
     @Bean
     public Declarables myQueue() {
-        Queue queueDirectFirst = new Queue("restaurants", false);
+        Queue queueDirectFirst = new Queue("notification", false);
         DirectExchange directExchange = new DirectExchange("directExchange");
 
         return new Declarables(queueDirectFirst, directExchange,
-                BindingBuilder.bind(queueDirectFirst).to(directExchange).with("restaurants"));
+                BindingBuilder.bind(queueDirectFirst).to(directExchange).with("notification"));
     }
 }

@@ -10,13 +10,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Schema(description = "DTO полной информации о заказе")
 public class FullOrderDTO extends OrderDTOInt {
     @NotNull
     @Schema(description = "Идентификатор заказа")
-    private long id;
+    private UUID id;
     @NotBlank
     @Schema(description = "Ресторан")
     private Restaurant restaurant;

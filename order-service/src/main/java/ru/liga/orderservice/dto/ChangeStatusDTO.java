@@ -11,5 +11,5 @@ import javax.validation.constraints.NotNull;
 public class ChangeStatusDTO {
     @NotNull
     @Schema(description = "Новый статус для установки")
-    public Status orderAction;
+    public String orderAction;
 }
