@@ -1,5 +1,5 @@
-INSERT INTO customers(phone, email, address)
-VALUES ('8-999-888-77-66', 'myemail@yandex.ru', 'Nizhniy Novgorod, Restaurants st., 5'),
-       ('8-831-265-33-58', 'myworld@mail.ru', 'Nizhniy Novgorod, B.Pokrovskaya st., 79'),
-       ('8-953-753-41-23', 'badmail', 'Moscow, Some st., 32')
+INSERT INTO customers(phone, email, coordinates)
+VALUES ('8-999-888-77-66', 'myemail@yandex.ru', '56.238 43.863'),
+       ('8-831-265-33-58', 'myworld@mail.ru', '56.354 43.864'),
+       ('8-953-753-41-23', 'badmail', '56.312 44.070')
 ;

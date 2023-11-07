@@ -10,7 +10,6 @@ spring:
     database: postgresql
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=auth
-#    ?currentSchema=auth
     username: "postgres"
     password: "0704"
     driver-class-name: org.postgresql.Driver

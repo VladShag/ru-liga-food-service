@@ -7,7 +7,7 @@ import ru.liga.orderservice.dto.*;
 import ru.liga.common.entity.Order;
 import ru.liga.common.entity.OrderItem;
 import ru.liga.common.entity.Status;
-import ru.liga.common.exceptions.NoSuchOrderException;
+import ru.liga.common.exceptions.NoSuchEntityException;
 import ru.liga.common.repository.OrderRepository;
 import ru.liga.common.repository.RestaurantRepository;
 import ru.liga.orderservice.service.rabbitMQproducer.RabbitMQProducerServiceImp;
@@ -26,7 +26,7 @@ public class OrderService {
     private final RestaurantRepository restaurantRepository;
     private final OrderItemService orderItemService;
     private final RabbitMQProducerServiceImp rabbit;
-    private final long CUSTOMER_ID_MOCK = 13;
+    private final long CUSTOMER_ID_MOCK = 1;
     private final String MOSCOW_NAME = "Moscow";
 
     public MainOrderListDTO getAllOrders() {
@@ -59,7 +59,7 @@ public class OrderService {
         String statusToString = status.toString();
         List<Order> ordersByStatus = repository.findOrdersByStatus(statusToString);
         if (ordersByStatus.isEmpty()) {
-            throw new NoSuchOrderException("There is no orders with status " + status);
+            throw new NoSuchEntityException("There is no orders with status " + status);
         }
         List<OrderByStatusDTO> orderByStatusDTOS = new ArrayList<>();
         for (Order orderInRepo : ordersByStatus) {
@@ -102,6 +102,7 @@ public class OrderService {
         orderToChange.setStatus(status.toString());
         repository.save(orderToChange);
         FullOrderDTO dtoToGive = new FullOrderDTO();
+        dtoToGive.setId(orderToChange.getId());
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
@@ -124,10 +125,7 @@ public class OrderService {
         return itemDTOList;
     }
 
-    private Order checkIfOrderExist(long id) {
-        return repository.findOrderById(id).orElseThrow(() -> new NoSuchOrderException("There is no order with id: " + id));
-    }
-    private void sendMessageByStatus(Order order) {
-
+    public Order checkIfOrderExist(long id) {
+        return repository.findOrderById(id).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + id));
     }
 }

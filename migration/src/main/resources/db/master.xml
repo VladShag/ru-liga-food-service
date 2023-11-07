@@ -6,9 +6,10 @@
     <!-- глобальный ченджлог  -->
     <include file="changelog/init-couriers-table.xml" relativeToChangelogFile="true"/>
     <include file="changelog/init-customers-table.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/init-order-items-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-restaurants-table.xml" relativeToChangelogFile="true"/>
     <include file="changelog/init-orders-table.xml" relativeToChangelogFile="true"/>
     <include file="changelog/init-restaurant-menu-items-table.xml" relativeToChangelogFile="true"/>
-    <include file="changelog/init-restaurants-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-order-items-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/init-security-schema.xml" relativeToChangelogFile="true"/>
     <include file="changelog/cumulative-changelog.v.1.0.1.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

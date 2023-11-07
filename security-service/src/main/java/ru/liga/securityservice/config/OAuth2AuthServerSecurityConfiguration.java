@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,6 +45,7 @@ public class OAuth2AuthServerSecurityConfiguration {
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
         http
+                .csrf().disable()
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(
                                 new LoginUrlAuthenticationEntryPoint("/login"))
@@ -83,7 +85,6 @@ public class OAuth2AuthServerSecurityConfiguration {
                 new JdbcRegisteredClientRepository(jdbcTemplate);
         registeredClientRepository.save(registeredClient);
 
-
         return registeredClientRepository;
     }
 
@@ -97,7 +98,7 @@ public class OAuth2AuthServerSecurityConfiguration {
                 .keyID(UUID.randomUUID().toString())
                 .build();
         JWKSet jwkSet = new JWKSet(rsaKey);
-        return new ImmutableJWKSet<>(jwkSet);
+        return ((jwkSelector, securityContext) -> jwkSelector.select(jwkSet));
     }
 
     private static KeyPair generateRsaKey() {
