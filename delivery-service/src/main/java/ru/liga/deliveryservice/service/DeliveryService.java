@@ -51,7 +51,7 @@ public class DeliveryService {
         delieveryListDTO.setDeliveries(deliveries);
         return delieveryListDTO;
     }
-    @SneakyThrows
+
     public DeliveryDTO setDeliveryStatus(UUID id, String status) {
         if(!availableStatus.contains(status)) {
             throw new WrongStatusException("You can't set status: " + status + "!");
@@ -68,7 +68,7 @@ public class DeliveryService {
             }
             dtoToSend.setQueueToSend("kitchen-service");
             dtoToSend.setMessage("Courier will pick this order!");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
+            sendMessage(dtoToSend);
         }
         if(Status.DELIVERY_COMPLETE.toString().equals(status)) {
             if(!oldStatus.equals(Status.DELIVERY_DELIVERING.toString())) {
@@ -79,7 +79,7 @@ public class DeliveryService {
             courierRepository.save(courierToSetNewStatus);
             dtoToSend.setQueueToSend("order-service");
             dtoToSend.setMessage("Your order has delivered! Hope it was fast! :)");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
+            sendMessage(dtoToSend);
         }
         return mapOrderToDelivery(orderToChangeStatus);
     }
@@ -90,6 +90,10 @@ public class DeliveryService {
         deliveryDTOToAdd.setRestaurant(order.getRestaurant());
         deliveryDTOToAdd.setPayment(DELIVERY_PAYMENT);
         return deliveryDTOToAdd;
+    }
+    @SneakyThrows
+    private void sendMessage(RabbitSendOrderDTO dtoToSend) {
+        rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
     }
 
 }

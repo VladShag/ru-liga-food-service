@@ -65,11 +65,10 @@ public class OrderService {
         orderDTO.setItems(mapItemToItemToShowDTO(order.getItems()));
         return orderDTO;
     }
-@SneakyThrows
     public OrderCreatedDTO addNewOrder(@Valid OrderToCreateDTO dto) {
         Order orderToAdd = new Order();
         orderToAdd.setTimestamp(new Date());
-        OrderCreatedDTO orderCreatedDTO = new OrderCreatedDTO();
+        OrderCreatedDTO orderCreatedDTOToShow = new OrderCreatedDTO();
         if (restaurantRepository.findRestaurantById(dto.getRestaurantId()).isPresent()) {
             orderToAdd.setRestaurant(restaurantRepository.findRestaurantById(dto.getRestaurantId()).get());
             orderToAdd.setStatus(Status.CUSTOMER_CREATED.toString());
@@ -81,13 +80,13 @@ public class OrderService {
             dtoToSend.setOrderId(id);
             dtoToSend.setQueueToSend("notification");
             dtoToSend.setMessage("Новый заказ создан!");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
+            sendMessage(dtoToSend);
             orderToAdd.setItems(orderItemService.addNewOrderItems(dto, orderToAdd));
-            orderCreatedDTO.setId(id);
-            orderCreatedDTO.setSecretPaymentUrl("Url To Pay");
-            orderCreatedDTO.setEstimatedTimeOfArrival(new Time(10));
+            orderCreatedDTOToShow.setId(id);
+            orderCreatedDTOToShow.setSecretPaymentUrl("Url To Pay");
+            orderCreatedDTOToShow.setEstimatedTimeOfArrival(new Time(10));
         }
-        return orderCreatedDTO;
+        return orderCreatedDTOToShow;
     }
     @SneakyThrows
     public FullOrderDTO setOrderStatus(UUID id, String status) {
@@ -104,7 +103,7 @@ public class OrderService {
         if (Status.CUSTOMER_PAID.toString().equals(status)) {
             dtoToSend.setQueueToSend("kitchen-service");
             dtoToSend.setMessage("Заказ был оплачен, ожидает подтверждения ресторана!");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
+            sendMessage(dtoToSend);
         }
         return dtoToGive;
     }
@@ -120,6 +119,10 @@ public class OrderService {
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
+    }
+    @SneakyThrows
+    private void sendMessage(RabbitSendOrderDTO dtoToSend) {
+        rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
     }
 
     public Order checkIfOrderExist(UUID id) {

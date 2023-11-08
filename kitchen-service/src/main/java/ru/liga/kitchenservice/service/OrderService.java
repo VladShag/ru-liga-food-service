@@ -31,7 +31,6 @@ public class OrderService {
             Status.KITCHEN_PREPARING.toString(), Status.KITCHEN_REFUNDED.toString(), Status.DELIVERY_PENDING.toString());
 
 
-    @SneakyThrows
     public FullOrderDTO setOrderStatus(UUID id, String status) {
         if(!availableStatus.contains(status)) {
             throw new WrongStatusException("You can't set status: " + status + "!");
@@ -52,7 +51,7 @@ public class OrderService {
             }
             dtoToSend.setQueueToSend("delivery-service");
             dtoToSend.setMessage("Order is being prepared, waiting for delivery!");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
+            sendMessage(dtoToSend);
         }
         if (Status.KITCHEN_DENIED.toString().equals(status)) {
             if(!oldStatus.equals(Status.CUSTOMER_PAID.toString())) {
@@ -60,12 +59,12 @@ public class OrderService {
             }
             dtoToSend.setQueueToSend("order-service");
             dtoToSend.setMessage("Заказ был отклонен рестораном!");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
+            sendMessage(dtoToSend);
         }
         System.out.println(dtoToShow);
         return dtoToShow;
     }
-    private static List<ItemToShowCustomerDTO> mapItemToItemToShowDTO(List<OrderItem> itemList) {
+    private List<ItemToShowCustomerDTO> mapItemToItemToShowDTO(List<OrderItem> itemList) {
         List<ItemToShowCustomerDTO> itemDTOList = new ArrayList<>();
         for (OrderItem item : itemList) {
             ItemToShowCustomerDTO itemDTO = new ItemToShowCustomerDTO();
@@ -76,5 +75,9 @@ public class OrderService {
             itemDTOList.add(itemDTO);
         }
         return itemDTOList;
+    }
+    @SneakyThrows
+    private void sendMessage(RabbitSendOrderDTO dtoToSend) {
+        rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
     }
 }
