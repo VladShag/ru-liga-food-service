@@ -46,12 +46,14 @@ public class OrderService {
         RabbitSendOrderDTO dtoToSend = new RabbitSendOrderDTO();
         dtoToSend.setOrderId(orderToChange.getId());
         if (Status.DELIVERY_PENDING.toString().equals(status)) {
-            if(!oldStatus.equals(Status.KITCHEN_PREPARING.toString()) || !oldStatus.equals(Status.KITCHEN_ACCEPTED.toString())) {
-                throw new WrongStatusException("You can't set status on order, which is " + oldStatus);
+            if(oldStatus.equals(Status.KITCHEN_PREPARING.toString()) || oldStatus.equals(Status.KITCHEN_ACCEPTED.toString())) {
+                dtoToSend.setQueueToSend("delivery-service");
+                dtoToSend.setMessage("Order is being prepared, waiting for delivery!");
+                sendMessage(dtoToSend);
+            } else {
+                throw new WrongStatusException("You can't set status: " + status + " on order which status is: " + oldStatus);
             }
-            dtoToSend.setQueueToSend("delivery-service");
-            dtoToSend.setMessage("Order is being prepared, waiting for delivery!");
-            sendMessage(dtoToSend);
+
         }
         if (Status.KITCHEN_DENIED.toString().equals(status)) {
             if(!oldStatus.equals(Status.CUSTOMER_PAID.toString())) {
