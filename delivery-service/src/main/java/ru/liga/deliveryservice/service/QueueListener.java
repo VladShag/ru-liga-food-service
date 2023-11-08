@@ -35,8 +35,8 @@ public class QueueListener {
     private void setCourierToOrder(Order order) {
         String coordinates = order.getRestaurant().getCoordinates();
         List<Courier> couriers = courierRepository.findAll();
-        double minDist = Double.MAX_VALUE;
-        long courierIdToPut = 0;
+        double minDist = 1000000.00;
+        long courierIdToPut = 1;
         Order orderToSetCourier = orderRepository.findOrderById(order.getId()).orElseThrow(() -> new NoSuchEntityException("There is no order with id: " + order.getId()));
         for (Courier courier : couriers) {
             if (courier.getStatus().equals("COURIER_ACTIVE")) {
@@ -52,7 +52,7 @@ public class QueueListener {
         Courier courier = courierRepository.getCourierById(courierIdToPut).orElseThrow(() -> new NoSuchEntityException("No courier with such id!"));
         courier.setStatus(CourierStatus.COURIER_BUSY.toString());
         courierRepository.save(courier);
-        System.out.println("Courier with id " + courier.getId() + " will delieve order with id " + orderToSetCourier.getId());
+        System.out.println("Courier with id " + courier.getId() + " should deliver order with id " + orderToSetCourier.getId());
     }
     private double calcDistance(String courierCoords, String restaurantCoords) {
         String[] coordinatesRestaurantSplitted = restaurantCoords.split(" ");

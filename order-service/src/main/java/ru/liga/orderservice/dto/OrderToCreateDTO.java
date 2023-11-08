@@ -15,6 +15,10 @@ public class OrderToCreateDTO {
     @Min(0)
     @Schema(description = "Идентификатор ресторана")
     private long restaurantId;
+    @NotNull
+    @Min(0)
+    @Schema(description = "Идентификатор клиента")
+    private long customerId;
     @NotEmpty
     @Schema(description = "Позиции в заказе")
     private List<ItemToAddDTO> menuItems;

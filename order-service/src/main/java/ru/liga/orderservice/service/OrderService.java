@@ -11,6 +11,7 @@ import ru.liga.common.entity.Order;
 import ru.liga.common.entity.OrderItem;
 import ru.liga.common.entity.Status;
 import ru.liga.common.exceptions.NoSuchEntityException;
+import ru.liga.common.repository.CustomerRepository;
 import ru.liga.common.repository.OrderRepository;
 import ru.liga.common.repository.RestaurantRepository;
 import ru.liga.orderservice.dto.*;
@@ -29,9 +30,10 @@ import java.util.UUID;
 public class OrderService {
     private final OrderRepository repository;
     private final RestaurantRepository restaurantRepository;
+    private final CustomerRepository customerRepository;
     private final OrderItemService orderItemService;
     private final RabbitMQProducerServiceImp rabbit;
-    private final long CUSTOMER_ID_MOCK = 1;
+
     private final String ROUTING_KEY_NOTIFICATION = "notification";
     private final ObjectMapper mapper;
 
@@ -41,16 +43,16 @@ public class OrderService {
             throw new NoSuchEntityException("There is no orders!");
         }
         MainOrderListDTO DTOToReturn = new MainOrderListDTO();
-        List<FullOrderDTO> listToReturn = new ArrayList<>();
+        List<FullOrderDTO> listDTOOrdersToShow = new ArrayList<>();
         for (Order orderInRepo : orders) {
             FullOrderDTO orderDTO = new FullOrderDTO();
             orderDTO.setId(orderInRepo.getId());
             orderDTO.setRestaurant(orderInRepo.getRestaurant());
             orderDTO.setTimestamp(orderInRepo.getTimestamp());
             orderDTO.setItems(mapItemToItemToShowDTO(orderInRepo.getItems()));
-            listToReturn.add(orderDTO);
+            listDTOOrdersToShow.add(orderDTO);
         }
-        DTOToReturn.setOrders(listToReturn);
+        DTOToReturn.setOrders(listDTOOrdersToShow);
         return DTOToReturn;
     }
 
@@ -63,7 +65,7 @@ public class OrderService {
         orderDTO.setItems(mapItemToItemToShowDTO(order.getItems()));
         return orderDTO;
     }
-
+@SneakyThrows
     public OrderCreatedDTO addNewOrder(@Valid OrderToCreateDTO dto) {
         Order orderToAdd = new Order();
         orderToAdd.setTimestamp(new Date());
@@ -71,14 +73,18 @@ public class OrderService {
         if (restaurantRepository.findRestaurantById(dto.getRestaurantId()).isPresent()) {
             orderToAdd.setRestaurant(restaurantRepository.findRestaurantById(dto.getRestaurantId()).get());
             orderToAdd.setStatus(Status.CUSTOMER_CREATED.toString());
-            orderToAdd.setCustomerId(CUSTOMER_ID_MOCK);
+            orderToAdd.setCustomerId(customerRepository.getCustomerById(dto.getRestaurantId()).orElseThrow(() -> new NoSuchEntityException("There is no customer with id" + dto.getCustomerId())).getId());
             UUID id = UUID.randomUUID();
             orderToAdd.setId(id);
             repository.save(orderToAdd);
-            rabbit.sendMessage("Новый заказ с id" + id + " создан!", ROUTING_KEY_NOTIFICATION);
+            RabbitSendOrderDTO dtoToSend = new RabbitSendOrderDTO();
+            dtoToSend.setOrderId(id);
+            dtoToSend.setQueueToSend("notification");
+            dtoToSend.setMessage("Новый заказ создан!");
+            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
             orderToAdd.setItems(orderItemService.addNewOrderItems(dto, orderToAdd));
-            orderCreatedDTO.setId(1);
-            orderCreatedDTO.setSecretPaymentUrl("Some test string");
+            orderCreatedDTO.setId(id);
+            orderCreatedDTO.setSecretPaymentUrl("Url To Pay");
             orderCreatedDTO.setEstimatedTimeOfArrival(new Time(10));
         }
         return orderCreatedDTO;
@@ -89,16 +95,16 @@ public class OrderService {
         orderToChange.setStatus(status);
         repository.save(orderToChange);
         FullOrderDTO dtoToGive = new FullOrderDTO();
+        RabbitSendOrderDTO dtoToSend = new RabbitSendOrderDTO();
         dtoToGive.setId(orderToChange.getId());
         dtoToGive.setItems(mapItemToItemToShowDTO(orderToChange.getItems()));
         dtoToGive.setRestaurant(orderToChange.getRestaurant());
         dtoToGive.setTimestamp(orderToChange.getTimestamp());
-        RabbitSendOrderDTO dtoToSent = new RabbitSendOrderDTO();
-        dtoToSent.setOrderId(orderToChange.getId());
+        dtoToSend.setOrderId(orderToChange.getId());
         if (Status.CUSTOMER_PAID.toString().equals(status)) {
-            dtoToSent.setQueueToSend("kitchen-service");
-            dtoToSent.setMessage("Заказ был оплачен, ожидает подтверждения ресторана!");
-            rabbit.sendMessage(mapper.writeValueAsString(dtoToSent), ROUTING_KEY_NOTIFICATION);
+            dtoToSend.setQueueToSend("kitchen-service");
+            dtoToSend.setMessage("Заказ был оплачен, ожидает подтверждения ресторана!");
+            rabbit.sendMessage(mapper.writeValueAsString(dtoToSend), ROUTING_KEY_NOTIFICATION);
         }
         return dtoToGive;
     }

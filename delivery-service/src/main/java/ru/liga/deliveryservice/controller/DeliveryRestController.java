@@ -10,8 +10,6 @@ import ru.liga.deliveryservice.dto.DelieveryListDTO;
 import ru.liga.deliveryservice.dto.DeliveryDTO;
 import ru.liga.deliveryservice.service.DeliveryService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.UUID;
 
 @RestController
@@ -23,10 +21,9 @@ public class DeliveryRestController {
     @GetMapping("/")
     @Operation(
             summary = "Получить заказы по cтатусу",
-            description = "Метод, позволяющий получить список заказов на доставку по статусу"
+            description = "Метод, позволяющий получить список заказов на доставку по статусу. Статус передается в параметре status"
     )
-    public DelieveryListDTO getDeliveriesByStatus() {
-        String status = Status.DELIVERY_PENDING.toString();
+    public DelieveryListDTO getDeliveriesByStatus(@RequestParam("status") String status) {
         return service.getDeliveriesByStatus(status);
     }
 
@@ -36,16 +33,16 @@ public class DeliveryRestController {
             summary = "Принять заказ",
             description = "Метод, позволяющий принять заказ на доставку по ID"
     )
-    public DeliveryDTO acceptDelivery(@PathVariable("id") @Min(0) UUID id) {
+    public DeliveryDTO acceptDelivery(@PathVariable("id") UUID id) {
         return service.setDeliveryStatus(id, Status.DELIVERY_PICKING.toString());
     }
     @PostMapping("/{id}/complete")
     @PreAuthorize("hasAuthority('ROLE_COURIER')")
     @Operation(
-            summary = "Принять заказ",
+            summary = "Завершить заказ",
             description = "Метод, позволяющий принять заказ на доставку по ID"
     )
-    public DeliveryDTO completeDelivery(@PathVariable("id") @Min(0) UUID id) {
+    public DeliveryDTO completeDelivery(@PathVariable("id") UUID id) {
         return service.setDeliveryStatus(id, Status.DELIVERY_COMPLETE.toString());
     }
 }

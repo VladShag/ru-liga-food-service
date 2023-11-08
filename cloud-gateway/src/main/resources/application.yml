@@ -12,15 +12,15 @@ spring:
           filters:
             - TokenRelay=
             - RemoveRequestHeader=Cookie
-            - RewritePath=/delivery/(?<path>.*), /$\{path}
+            - RewritePath=/(?<path>.*), /$\{path}
         - id: order
           uri: http://localhost:9001/
           predicates:
-            - Path=/order/**
+            - Path=/orders/**
           filters:
             - TokenRelay=
             - RemoveRequestHeader=Cookie
-            - RewritePath=/order/(?<path>.*), /$\{path}
+            - RewritePath=/(?<path>.*), /$\{path}
         - id: kitchen
           uri: http://localhost:9003/
           predicates:
@@ -28,7 +28,7 @@ spring:
           filters:
             - TokenRelay=
             - RemoveRequestHeader=Cookie
-            - RewritePath=/kitchen/(?<path>.*), /$\{path}
+            - RewritePath=/(?<path>.*), /$\{path}
 
   security:
     oauth2:
@@ -41,6 +41,8 @@ spring:
             authorization-grant-type: authorization_code
             redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
             scope: openid,message.read
+
         provider:
           spring:
             issuer-uri: http://localhost:9000
+

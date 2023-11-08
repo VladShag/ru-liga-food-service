@@ -43,7 +43,7 @@ public class RabbitConfig {
         Queue queueDirectThird = new Queue("order-service", false);
         DirectExchange directExchange = new DirectExchange("directExchange");
 
-        return new Declarables(queueDirectFirst, queueDirectSecond, directExchange,
+        return new Declarables(queueDirectFirst, queueDirectSecond, queueDirectThird, directExchange,
                 BindingBuilder.bind(queueDirectFirst).to(directExchange).with("kitchen-service"),
                 BindingBuilder.bind(queueDirectSecond).to(directExchange).with("delivery-service"),
                 BindingBuilder.bind(queueDirectThird).to(directExchange).with("order-service"));

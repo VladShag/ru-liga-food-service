@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="New Database Data Final" author="vladShag">
+    <changeSet id="TestDataBase" author="vladShag">
         <sqlFile path="v.1.0.1/insert-into-couriers.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.1/insert-into-customers.sql" relativeToChangelogFile="true"/>
         <sqlFile path="v.1.0.1/insert-into-restaurants.sql" relativeToChangelogFile="true"/>

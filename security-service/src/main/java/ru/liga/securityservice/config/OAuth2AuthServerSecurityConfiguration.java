@@ -2,7 +2,6 @@ package ru.liga.securityservice.config;
 
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
@@ -87,7 +86,6 @@ public class OAuth2AuthServerSecurityConfiguration {
 
         return registeredClientRepository;
     }
-
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         KeyPair keyPair = generateRsaKey();
@@ -126,11 +124,23 @@ public class OAuth2AuthServerSecurityConfiguration {
                 "user", defaultPasswordEncoder().encode("password"),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
         );
+        CustomUserDetails courierCustomUserDetails = new CustomUserDetails(
+                "courier", defaultPasswordEncoder().encode("password"),
+                Collections.singletonList(new SimpleGrantedAuthority("COURIER"))
+        );
+        CustomUserDetails adminCustomUserDetails = new CustomUserDetails(
+                "admin", defaultPasswordEncoder().encode("admin"),
+                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"))
+        );
 
         JdbcUserDetailsManager jdbcUserDetailsManager =
                 new JdbcUserDetailsManager(jdbcTemplate.getDataSource());
         jdbcUserDetailsManager.deleteUser("user");
+        jdbcUserDetailsManager.deleteUser("courier");
+        jdbcUserDetailsManager.deleteUser("admin");
         jdbcUserDetailsManager.createUser(customUserDetails);
+        jdbcUserDetailsManager.createUser(courierCustomUserDetails);
+        jdbcUserDetailsManager.createUser(adminCustomUserDetails);
 
         return jdbcUserDetailsManager;
     }

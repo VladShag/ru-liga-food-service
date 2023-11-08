@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="init-restaurant_menu_items-table-final" author="vladShag">
+    <changeSet id="init-restaurant_menu_items-table-test" author="vladShag">
         <sqlFile path="v.1.0.0/create-table-restaurant-menu-items.sql" relativeToChangelogFile="true"/>
         <rollback>
             <sqlFile path="v.1.0.0/rollback/restaurant_menu_items_rollback.sql" relativeToChangelogFile="true"/>

@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="init-security-schema" author="vladShag">
+    <changeSet id="init-security-test" author="vladShag">
         <sqlFile path="v.1.0.0/security/schema.sql" relativeToChangelogFile="true"/>
         <rollback>
             <sqlFile path="v.1.0.0/rollback/security/security-rollback.sql" relativeToChangelogFile="true"/>

@@ -1,7 +1,6 @@
 package ru.liga.common.entity;
 
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,11 +17,6 @@ import java.util.UUID;
 @Builder
 public class Order {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
     @Column(name = "customer_id")
     private long customerId;

@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.liga.common.entity.Status;
-import ru.liga.kitchenservice.dto.OrderToKitchenDTO;
+import ru.liga.kitchenservice.dto.FullOrderDTO;
 import ru.liga.kitchenservice.service.OrderService;
 
 import javax.validation.constraints.Min;
@@ -22,25 +22,25 @@ public class OrderController {
     @PostMapping("/{id}/accept")
     @Operation(
             summary = "Принять заказ по ID",
-            description = "Метод, позволяющий получить заказ на доставку по ID"
+            description = "Метод, позволяющий получить заказ на кухню по ID"
     )
-    public OrderToKitchenDTO acceptOrder(@PathVariable("id") @Min(0) UUID id) {
+    public FullOrderDTO acceptOrder(@PathVariable("id") UUID id) {
         return service.setOrderStatus(id, Status.KITCHEN_ACCEPTED.toString());
     }
     @PostMapping("/{id}/decline")
     @Operation(
             summary = "Отклонить заказ по ID",
-            description = "Метод, позволяющий получить заказ на доставку по ID"
+            description = "Метод, позволяющий отклонить входящий заказ по ID"
     )
-    public OrderToKitchenDTO declineOrder(@PathVariable("id") @Min(0) UUID id) {
+    public FullOrderDTO declineOrder(@PathVariable("id") UUID id) {
         return service.setOrderStatus(id, Status.KITCHEN_DENIED.toString());
     }
     @PostMapping("/{id}/ready")
     @Operation(
-            summary = "Отклонить заказ по ID",
-            description = "Метод, позволяющий получить заказ на доставку по ID"
+            summary = "Отметить заказ готовым по ID",
+            description = "Метод, позволяющий поставить статус \"Готов\" на заказ по ID"
     )
-    public OrderToKitchenDTO endOrder(@PathVariable("id") @Min(0) UUID id) {
+    public FullOrderDTO endOrder(@PathVariable("id") UUID id) {
         return service.setOrderStatus(id, Status.DELIVERY_PENDING.toString());
     }
 }
