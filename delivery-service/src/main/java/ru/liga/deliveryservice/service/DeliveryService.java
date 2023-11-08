@@ -63,12 +63,15 @@ public class DeliveryService {
         RabbitSendOrderDTO dtoToSend = new RabbitSendOrderDTO();
         dtoToSend.setOrderId(id);
         if(Status.DELIVERY_PICKING.toString().equals(status)) {
-            if(!oldStatus.equals(Status.DELIVERY_PENDING.toString()) || !oldStatus.equals(Status.DELIVERY_PICKING.toString())) {
+            if(oldStatus.equals(Status.DELIVERY_PENDING.toString()) || oldStatus.equals(Status.DELIVERY_PICKING.toString())) {
+                dtoToSend.setQueueToSend("kitchen-service");
+                dtoToSend.setMessage("Courier will pick this order!");
+                sendMessage(dtoToSend);
+
+            } else {
                 throw new WrongStatusException("You can't set status on order, which is " + oldStatus);
             }
-            dtoToSend.setQueueToSend("kitchen-service");
-            dtoToSend.setMessage("Courier will pick this order!");
-            sendMessage(dtoToSend);
+
         }
         if(Status.DELIVERY_COMPLETE.toString().equals(status)) {
             if(!oldStatus.equals(Status.DELIVERY_DELIVERING.toString())) {
