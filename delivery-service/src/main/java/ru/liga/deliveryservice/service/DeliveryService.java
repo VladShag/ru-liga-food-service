@@ -63,7 +63,7 @@ public class DeliveryService {
         RabbitSendOrderDTO dtoToSend = new RabbitSendOrderDTO();
         dtoToSend.setOrderId(id);
         if(Status.DELIVERY_PICKING.toString().equals(status)) {
-            if(!oldStatus.equals(Status.DELIVERY_PENDING.toString())) {
+            if(!oldStatus.equals(Status.DELIVERY_PENDING.toString()) || !oldStatus.equals(Status.DELIVERY_PICKING.toString())) {
                 throw new WrongStatusException("You can't set status on order, which is " + oldStatus);
             }
             dtoToSend.setQueueToSend("kitchen-service");

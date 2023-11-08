@@ -14,7 +14,7 @@ public class ExceptionHandlerAdvice {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(WrongStatusException.class)
-    public ResponseEntity<String> wrongStatusException(NoSuchEntityException e) {
+    public ResponseEntity<String> wrongStatusException(WrongStatusException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 }
